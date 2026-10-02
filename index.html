@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="de"><head><script>document.documentElement.className="js"</script><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>R+V Social-Media-Strategie</title>
+<style>
+:root{--bg:#00366F;--sf:#0A4586;--sf2:#12559E;--cr:#F1E9D8;--cr2:#B9D0EA;--or:#F39200;--bl:#1E7FD8;--lb:#8CC8FF;--ln:#2A6AB0;--dk:#00366F;--color-bg:#00366F;--color-surface:#0A4586;--color-surface2:#12559E;--color-text:#F1E9D8;--color-muted:#B9D0EA;--color-primary:#F39200;--color-secondary:#8CC8FF;--color-line:#2A6AB0;--color-ink:#00366F;--radius-sm:10px;--radius-md:16px;--radius-lg:24px;--spacing-xs:6px;--spacing-sm:12px;--spacing-md:20px;--spacing-lg:36px;--spacing-xl:64px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*:before,*:after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(64px + env(safe-area-inset-top,0px))}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:Inter,"Segoe UI",Helvetica,Arial,sans-serif;font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden}
+.wrap{max-width:1000px;margin:auto;padding:0 var(--spacing-md)}
+section{padding:var(--spacing-xl) 0 0}
+.kick{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--color-primary)}
+h1{font-size:clamp(36px,10vw,72px);line-height:1.02;letter-spacing:-.025em;margin:12px 0 var(--spacing-sm);font-weight:800}
+h2{font-size:clamp(26px,6.5vw,42px);line-height:1.12;letter-spacing:-.015em;margin:8px 0 var(--spacing-md);font-weight:800}
+h3{font-size:19px;margin:0 0 var(--spacing-xs)}
+p{margin:0 0 var(--spacing-sm)}
+.mut{color:var(--color-muted)}
+.sm{font-size:13px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(0,54,111,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-line)}
+nav .wrap{display:flex;gap:8px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav a{flex:none;color:var(--color-muted);text-decoration:none;font-size:14px;font-weight:600;padding:10px 16px;border-radius:99px;min-height:44px;display:flex;align-items:center}
+nav a.on{background:var(--color-text);color:var(--color-ink)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--color-secondary);outline-offset:2px}
+.hero{padding:var(--spacing-lg) 0 0;min-height:78vh;display:flex;flex-direction:column;justify-content:center}
+.hero h1 em{font-style:normal;color:var(--color-primary)}
+.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:99px;background:var(--color-primary);color:var(--color-ink);font-weight:700;text-decoration:none;border:0;font:inherit;font-weight:700;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.card{background:var(--color-surface);border:1px solid var(--color-line);border-radius:var(--radius-md);padding:var(--spacing-md)}
+.grid{display:grid;gap:var(--spacing-sm);grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.num{font-size:clamp(34px,9vw,52px);font-weight:800;line-height:1;color:var(--color-text)}
+.num small{font-size:.45em;font-weight:700;color:var(--color-primary);margin-left:4px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid var(--color-muted);color:var(--color-muted)}
+.tag.r{border-color:var(--color-secondary);color:var(--color-secondary)}
+.bars{display:grid;gap:10px;margin-top:var(--spacing-md)}
+.br{display:grid;grid-template-columns:84px 1fr 78px;gap:10px;align-items:center;font-size:14px}
+.br div{height:16px;border-radius:8px;background:var(--color-surface);overflow:hidden}
+.br i{display:block;height:100%;width:0;min-width:4px;border-radius:8px;background:var(--color-secondary);transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.br.me{font-weight:800}.br.me i{background:var(--color-primary)}
+.br.lv i{background:repeating-linear-gradient(45deg,var(--color-secondary) 0 4px,transparent 4px 7px)}
+.br b{text-align:right;font-size:13px}
+.call{border-left:4px solid var(--color-primary);padding:4px 0 4px var(--spacing-md);font-size:clamp(20px,4.5vw,26px);font-weight:700;line-height:1.25;margin:var(--spacing-lg) 0 0}
+.stabs{display:flex;gap:8px;margin-bottom:var(--spacing-sm);overflow-x:auto;scrollbar-width:none}
+.stabs button{flex:1 0 auto;min-height:48px;padding:0 18px;border-radius:99px;border:1px solid var(--color-line);background:transparent;color:var(--color-text);font:inherit;font-weight:700}
+.stabs button[aria-selected=true]{background:var(--color-text);color:var(--color-ink);border-color:var(--color-text)}
+.tp[hidden]{display:none}
+.tp{animation:in .3s ease}
+dl{margin:0;display:grid;gap:var(--spacing-sm)}
+dt{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-muted)}
+dd{margin:2px 0 0;font-weight:600}
+.zk{display:grid;gap:0}
+.zk>div{position:relative;background:var(--color-surface);border:1px solid var(--color-line);border-radius:var(--radius-md);padding:var(--spacing-sm) var(--spacing-md);margin-bottom:22px}
+.zk>div:not(:last-child):after{content:"↓";position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);color:var(--color-primary);font-weight:800}
+.zk small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-muted)}
+details{background:var(--color-surface);border:1px solid var(--color-line);border-radius:var(--radius-md);margin-bottom:var(--spacing-sm);overflow:hidden}
+summary{list-style:none;cursor:pointer;padding:var(--spacing-md);display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;min-height:56px}
+summary::-webkit-details-marker{display:none}
+summary b{font-size:20px}
+summary:after{content:"+";grid-row:1;grid-column:2;font-size:26px;color:var(--color-primary);line-height:1;transition:transform .2s}
+details[open] summary:after{transform:rotate(45deg)}
+.sc{grid-column:1/-1;height:6px;border-radius:3px;background:var(--color-line);overflow:hidden}
+.sc i{display:block;height:100%;background:var(--color-primary)}
+.body{padding:0 var(--spacing-md) var(--spacing-md);animation:in .3s ease}
+.pri summary b:before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--color-text);margin-right:10px}
+.tst{border-style:dashed;border-color:var(--color-primary)}
+.sw{display:flex;gap:var(--spacing-sm);overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(var(--spacing-md) * -1);padding:0 var(--spacing-md) var(--spacing-sm);scrollbar-width:none}
+.sw .card{flex:0 0 min(82%,320px);scroll-snap-align:center}
+.sw .card .n{font-size:13px;font-weight:800;color:var(--color-primary)}
+.dots{display:flex;justify-content:center;gap:8px;margin-top:6px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--color-line);transition:background .2s,width .2s}
+.dots i.on{background:var(--color-primary);width:22px;border-radius:4px}
+.steps{display:grid;gap:var(--spacing-sm);counter-reset:s}
+.steps div{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+.steps div:before{content:counter(s);width:44px;height:44px;border-radius:50%;background:var(--color-primary);color:var(--color-ink);font-weight:800;display:grid;place-items:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:var(--spacing-sm)}
+.opts div{background:var(--color-surface2);border-radius:var(--radius-md);padding:var(--spacing-sm) var(--spacing-md);font-size:14px}
+.opts b{display:block;font-size:15px}
+ul.src{padding-left:20px;margin:0}
+.fin{background:var(--color-text);color:var(--color-ink);border-radius:var(--radius-lg);padding:var(--spacing-lg) var(--spacing-md);margin-top:var(--spacing-xl);text-align:center}
+.fin h2{margin-top:0}
+.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.js .reveal.v{opacity:1;transform:none}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+footer{padding:var(--spacing-lg) 0 var(--spacing-xl)}
+@media(min-width:760px){.wrap{padding:0 40px}.br{grid-template-columns:110px 1fr 90px}.sw{margin:0;padding:0 0 var(--spacing-sm)}.sw .card{flex-basis:300px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js .reveal{opacity:1;transform:none}}
+.main{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;margin-top:26px}
+@media(min-width:900px){.main{grid-template-columns:minmax(0,460px) minmax(0,1fr);align-items:start}.wheel{position:sticky;top:20px}}
+.wheel svg{width:100%;height:auto;display:block;overflow:visible}
+.seg{cursor:pointer;transition:transform .25s ease,opacity .25s ease;opacity:.8;outline:none}
+.seg:hover,.seg.on{opacity:1}
+.seg:focus-visible path{stroke:#fff;stroke-width:2}
+.seg text{pointer-events:none;font-family:inherit}
+.hint{text-align:center;font-size:12px;color:var(--cr2);margin-top:6px}
+.pn{background:var(--sf);border:1px solid var(--ln);border-radius:20px;padding:16px 16px 16px;scroll-margin-top:12px;animation:up .35s ease;min-width:0}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--ln);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--ln);background:transparent;color:var(--cr2);font:inherit;font-size:13px;font-weight:700}
+.tabs button.on{background:var(--cr);color:var(--dk);border-color:var(--cr)}
+.ph{display:flex;align-items:center;gap:14px}
+.nm{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
+.gp{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cr2)}
+.pn h2{margin:0;font-size:clamp(22px,3.8vw,28px)}
+.qs{font-size:13px;font-style:italic;color:var(--cr2);margin:12px 0 0}
+.hl{font-size:clamp(20px,3.4vw,26px);font-weight:700;line-height:1.22;margin:6px 0 4px;letter-spacing:-.01em}
+.lb{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin:20px 0 10px;display:flex;align-items:center;gap:10px}
+.lb:after{content:"";flex:1;height:1px;background:var(--ln)}
+.fs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.ft2{background:var(--sf2);border-radius:14px;padding:14px;border-top:3px solid var(--cr);min-width:0}
+.ft2 b{display:block;font-size:clamp(19px,3vw,25px);line-height:1.15;font-weight:800;overflow-wrap:anywhere}
+.ft2 span{display:block;font-size:12.5px;color:var(--cr2);margin-top:6px}
+.rc{display:flex;gap:12px;align-items:flex-start;background:rgba(140,200,255,.13);border-left:3px solid var(--lb);border-radius:0 12px 12px 0;padding:11px 14px;margin-bottom:8px;font-size:14.5px}
+.rc i{font-style:normal;color:var(--lb);font-weight:800;flex:none}
+.cp{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cp span{background:var(--sf2);border:1px solid var(--lb);border-radius:99px;padding:3px 11px;font-size:12.5px}
+.nv{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.nv button{font:inherit;font-size:13px;font-weight:600;background:var(--sf2);color:var(--cr);border:1px solid var(--ln);border-radius:99px;padding:9px 16px;max-width:48%}
+.cr{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;font-weight:600;margin:0 0 var(--spacing-md)}.cr span{background:var(--color-surface);border:1px solid var(--color-line);border-radius:99px;padding:6px 12px}.lgd{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12px;color:var(--color-muted);margin-bottom:var(--spacing-sm)}.lgd span{display:flex;align-items:center;gap:6px}.lgd i{width:10px;height:10px;border-radius:50%;display:inline-block}
+</style></head><body>
+<nav aria-label="Abschnitte"><div class="wrap" id="nv"><a href="#start">Start</a><a href="#lage">Lage</a><a href="#matrix">Matrix</a><a href="#kanaele">Kanäle</a><a href="#content">Content</a><a href="#pilot">Pilot</a><a href="#quellen">Quellen</a></div></nav>
+<main class="wrap">
+<section id="start" class="hero" style="padding-top:var(--spacing-lg)"><div class="kick">R+V Social-Media-Strategie</div>
+<h1>Nicht mehr Kanäle.<br><em>Mehr Klarheit pro Kanal.</em></h1>
+<p class="mut" style="font-size:19px;max-width:560px">Menschen stehen in unterschiedlichen Lebensphasen. R+V begleitet sie: „Du bist nicht allein.“ Jeder Kanal bekommt dabei eine eigene Aufgabe.</p>
+<div class="cr"><span>Ausgangslage</span><span>→ Zielgruppe</span><span>→ Ziele</span><span>→ Kanäle</span><span>→ Inhalte</span><span>→ Wachstum</span></div>
+<p><a class="btn" href="#lage">Strategie entdecken ↓</a></p>
+<p class="sm mut">Alle Inhalte sind entweder <span class="tag">Beleg</span> aus dem Konzept oder <span class="tag r">Empfehlung</span>. Zielwerte fehlen bewusst, bis die Baseline vorliegt.</p></section>
+
+<section id="lage"><div class="kick">1 · Ausgangslage</div>
+<h2 class="reveal">R+V wächst stark, ist in sozialen Medien aber kaum sichtbar.</h2>
+<div class="grid reveal">
+<div class="card"><div class="num"><span data-c="22.8" data-d="1">0</span><small>Mrd. €</small></div><p class="sm mut">Beiträge 2025, +8,6 %</p></div>
+<div class="card"><div class="num"><span data-c="9">0</span><small>Mio.</small></div><p class="sm mut">Kunden</p></div>
+<div class="card"><div class="num"><span data-c="100000">0</span></div><p class="sm mut">Neukunden 2025 über digitale Kanäle</p></div></div>
+<h3 style="margin-top:var(--spacing-lg)">Community gesamt im Branchenvergleich <span class="tag">Beleg</span></h3>
+<div class="bars" role="img" aria-label="Balkenvergleich der Follower: Allianz 5,5 Mio., AXA 3,2 Mio., ERGO 685.000, Debeka 297.000, HUK-Coburg 293.000, LVM nur Instagram rund 17.000, R+V 181.000">
+<div class="br"><span>Allianz</span><div><i data-w="100"></i></div><b>5,5 Mio.</b></div>
+<div class="br"><span>AXA</span><div><i data-w="58"></i></div><b>3,2 Mio.</b></div>
+<div class="br"><span>ERGO</span><div><i data-w="12.5"></i></div><b>685.000</b></div>
+<div class="br"><span>Debeka</span><div><i data-w="5.4"></i></div><b>297.000</b></div>
+<div class="br"><span>HUK-Coburg</span><div><i data-w="5.3"></i></div><b>293.000</b></div>
+<div class="br lv"><span>LVM*</span><div><i data-w=".4"></i></div><b>~17.000*</b></div>
+<div class="br me"><span>R+V</span><div><i data-w="3.3"></i></div><b>181.000</b></div></div>
+<p class="sm mut" style="margin-top:10px">Follower gesamt laut Branchenauswertung (Momentaufnahme, Datum ungewiss). *LVM: nur Instagram, gerundet; kein Gesamtwert gefunden, daher nicht direkt vergleichbar.</p>
+<div class="grid" style="margin-top:var(--spacing-md)"><div class="card"><span class="tag">Erkenntnis</span><h3 style="margin-top:10px">Nicht schlagbar, aber abgrenzbar</h3><p class="sm mut">Gegen die Reichweite der Allianz hilft nur Differenzierung.</p></div>
+<div class="card"><span class="tag r">Empfehlung</span><h3 style="margin-top:10px">Genossenschaftlich, hilfreich, familiennah</h3><p class="sm mut">Durch Claim und Familienkampagne gedeckt, im Social-Umfeld wenig besetzt.</p></div>
+<div class="card"><span class="tag">Lernen von</span><h3 style="margin-top:10px">HUK-Coburg · LVM · ERGO</h3><p class="sm mut">HUK-Coburg und LVM erreichten in einer Studie (2020) viel Austausch auf Instagram. LVM testet Mitarbeitende als Markenbotschafter (2026). ERGO war früh auf TikTok.</p></div></div>
+<p class="call">Marke und Wachstum sind stärker als die soziale Sichtbarkeit. <span class="mut" style="font-weight:400;font-size:.7em">Empfehlung: nicht breiter werden, sondern pro Kanal schärfer.</span></p></section>
+
+
+
+<section id="matrix"><div class="kick">2 · Strategie-Matrix</div>
+<h2 class="reveal">Die Strategie in neun Feldern: von der Ausgangslage bis zur Einführung.</h2>
+<p class="mut sm">Tippe ein Feld im Rad an. Jedes Feld zeigt Belege und Empfehlungen.</p>
+<div class="lgd"><span><i style="background:#F1E9D8"></i>Ausgangslage</span><span><i style="background:#1E7FD8"></i>Strategie</span><span><i style="background:#F39200"></i>Umsetzung</span></div>
+<div class="main"><div class="wheel"><svg id="sv" viewBox="-14 -14 428 428" role="group" aria-label="Strategie-Matrix als Rad mit neun Feldern"></svg><div class="hint">Feld antippen oder mit ← → wechseln</div></div><div id="pn" class="pn" tabindex="-1" aria-live="polite"></div></div></section>
+<section id="kanaele"><div class="kick">3 · Kanäle</div>
+<h2 class="reveal">Nicht: Welcher Kanal ist am größten? Sondern: Welche Aufgabe hat er?</h2>
+<details class="pri"><summary><b>Instagram</b><span class="tag r">Primär</span><div class="sc"><i style="width:82%"></i></div></summary><div class="body"><p class="sm mut">Score 4,10 von 5</p><p><b>Aufgabe:</b> Nähe in Alltagsmomenten zeigen und zur Beratung überleiten.</p><p class="sm">Zielgruppen: Familie startet, Berufsstart, Bestandskunden. Ziele: Reichweite, Beratung.</p></div></details>
+<details class="pri"><summary><b>YouTube</b><span class="tag r">Primär</span><div class="sc"><i style="width:79%"></i></div></summary><div class="body"><p class="sm mut">Score 3,95 von 5</p><p><b>Aufgabe:</b> Vorsorge verständlich und dauerhaft auffindbar erklären.</p><p class="sm">Zielgruppen: Familie startet, Berufsstart, Best Ager. Ziel: Vertrauen.</p></div></details>
+<details><summary><b>LinkedIn</b><span class="tag">Sekundär</span><div class="sc"><i style="width:63.4%"></i></div></summary><div class="body"><p class="sm mut">Score 3,17 von 5, nur für B2B und Recruiting 3,51</p><p><b>Aufgabe:</b> Menschen, Haltung und Fachkompetenz für Bewerber und Firmenkunden zeigen.</p><p class="sm">Zielgruppen: Nachwuchs, Betriebe. Ziel: Employer Branding.</p></div></details>
+<details class="tst"><summary><b>TikTok</b><span class="tag" style="color:var(--color-primary);border-color:var(--color-primary)">Test</span><div class="sc"><i style="width:67%"></i></div></summary><div class="body"><p class="sm mut">Score 3,36 von 5</p><p><b>Aufgabe:</b> Prüfen, ob Kurzvideo-Erklärer junge Zielgruppen für Vorsorge und Ausbildung gewinnen.</p><p class="sm">Zielgruppen: Berufsstart, Nachwuchs. Ziele: Reichweite, Employer Branding.</p></div></details>
+<details style="opacity:.7"><summary><b>Facebook · X</b><span class="tag">Nicht priorisiert</span><div class="sc"><i style="width:63.4%"></i></div></summary><div class="body"><p class="sm mut">Facebook: Score 3,17 von 5</p><p>Facebook nur als Paid-Option für Ältere. X hat keine strategische Rolle.</p></div></details>
+<p class="sm mut">Score = gewichtete Bewertung über 15 Kriterien, Höchstwert 5,0.</p></section>
+
+<section id="content"><div class="kick">4 · Content</div>
+<h2 class="reveal">Sechs Content-Pillars, jeder mit klarem Nutzen.</h2>
+<div class="sw" id="sw" tabindex="0" aria-label="Content-Pillars, seitlich wischen">
+<div class="card"><div class="n">1</div><h3>Nicht allein – Lebensmomente</h3><p class="sm mut">Bedürfnis: Unterstützung</p><p class="sm">Reels, Stories, YouTube-Film auf Instagram. Aktion: Speichern, Folgen.</p></div>
+<div class="card"><div class="n">2</div><h3>Kurz erklärt</h3><p class="sm mut">Bedürfnis: Verständlichkeit</p><p class="sm">Shorts, Erklärvideos, Carousels. Aktion: Mehr im Ratgeber. Kennzahl: Watch Time.</p></div>
+<div class="card"><div class="n">3</div><h3>Vorsorge-Check &amp; Beratung</h3><p class="sm mut">Bedürfnis: konkrete Hilfe</p><p class="sm">Story-Link, Paid-Leadformat. Aktion: Check starten, Termin buchen.</p></div>
+<div class="card"><div class="n">4</div><h3>Schutz im Alltag</h3><p class="sm mut">Bedürfnis: praktische Tipps</p><p class="sm">Alltagsnahe Tipps auf Instagram, TikTok (Test). Aktion: Teilen.</p></div>
+<div class="card"><div class="n">5</div><h3>Menschen bei R+V</h3><p class="sm mut">Bedürfnis: Glaubwürdigkeit</p><p class="sm">Kollegenporträts auf LinkedIn, TikTok, Instagram. Aktion: Bewerbung, Kontakt.</p></div>
+<div class="card"><div class="n">6</div><h3>Community &amp; Service</h3><p class="sm mut">Bedürfnis: Antworten</p><p class="sm">Q&amp;A, FAQ, Stories. Aktion: Frag uns. Kennzahl: Reaktionszeit.</p></div></div>
+<div class="dots" id="dt" aria-hidden="true"></div>
+</section>
+
+<section id="pilot"><div class="kick">5 · Pilot und Messung</div>
+<h2 class="reveal">Erst messen. Dann testen. Dann skalieren.</h2>
+<div class="steps reveal">
+<div><span><b>Baseline-Audit</b><br><span class="mut sm">Okt.–Nov. 2026: eigene Kanäle und Wettbewerber erheben, Rechte klären</span></span></div>
+<div><span><b>Vorbereitung</b><br><span class="mut sm">Redaktionsplan, Leitbild je Kanal, Freigabeprozess, Datenschutz</span></span></div>
+<div><span><b>Pilot über 12 Wochen</b><br><span class="mut sm">Familie startet und Berufsstart, Vergleichstests (A/B)</span></span></div>
+<div><span><b>Auswertung und Entscheidung</b><br><span class="mut sm">auf Basis der Baseline</span></span></div></div>
+<h3 style="margin-top:var(--spacing-lg)">Entscheidung nach dem Pilot</h3>
+<div class="opts"><div><b>Skalieren</b>Ziele klar erreicht</div><div><b>Optimieren</b>Wirkung da, Effizienz schwach</div><div><b>Weiter testen</b>Datenlage uneindeutig</div><div><b>Stoppen</b>Kein Nutzen, Aufwand zu hoch</div></div>
+<p class="call" style="font-size:clamp(18px,4vw,22px)">Gemessen wird, was auf ein strategisches Ziel einzahlt. <span class="mut" style="font-weight:400;font-size:.75em">Follower, Impressionen und Likes dienen nur als Kontext.</span></p></section>
+
+
+<section id="quellen"><div class="kick">Quellen</div>
+<details><summary><b>Quellen und Hinweise</b></summary><div class="body"><ul class="src sm">
+<li>R+V Newsroom (Bilanz 2025, Halbjahresbilanz), Handelsblatt</li>
+<li>Digital8 Social Media Report 2026 über Versicherungsbote (Follower-Ranking, Datum ungewiss)</li>
+<li>ARD/ZDF-Medienstudie 2025, Bitkom Research</li>
+<li>LVM: Instagram-Profil (gerundet), nicht aus dem Konzept</li>
+<li>Fachartikel zu DSGVO und UWG; VVG, IDD und BaFin sind mit der R+V-Compliance zu klären</li></ul>
+<p class="sm mut" style="margin-top:12px">Grundlage ist das R+V Social-Media-Marketingkonzept. Interne R+V-Daten (Budget, Personal, Kennzahlen je Kanal) liegen nicht vor.</p></div></details>
+<div class="fin"><div class="kick" style="color:var(--color-ink)">Fazit</div><h2>R+V ist nicht allein – und jeder Kanal weiß, wofür er da ist.</h2><p>Nächster Schritt: Baseline-Audit, dann Pilot.</p><a class="btn" href="#start" style="background:var(--color-ink);color:var(--color-text)">Nach oben ↑</a></div></section>
+</main><footer></footer>
+<script>
+var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+var tabs=document.querySelectorAll('[role=tab]');
+tabs.forEach(function(b,i){b.onclick=function(){tabs.forEach(function(t,k){t.setAttribute("aria-selected",k==i);document.getElementById("t"+k).hidden=k!=i})};b.onkeydown=function(e){var n=e.key=="ArrowRight"?i+1:e.key=="ArrowLeft"?i-1:-1;if(n>=0&&n<tabs.length){tabs[n].click();tabs[n].focus()}}});
+function cnt(el){var to=parseFloat(el.dataset.c),d=+el.dataset.d||0,t0=null;function f(t){t0=t0||t;var p=Math.min((t-t0)/1200,1),v=to*(1-Math.pow(1-p,3));el.textContent=v.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d});if(p<1)requestAnimationFrame(f)}rm?el.textContent=to.toLocaleString("de-DE",{minimumFractionDigits:d,maximumFractionDigits:d}):requestAnimationFrame(f)}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target;t.classList.add("v");t.querySelectorAll("[data-c]").forEach(cnt);t.querySelectorAll("[data-w]").forEach(function(i){i.style.width=i.dataset.w+"%"});io.unobserve(t)})},{threshold:.2});
+document.querySelectorAll(".reveal,.bars").forEach(function(e){io.observe(e)});
+document.querySelectorAll("[data-c]").forEach(function(c){if(!c.closest(".reveal"))io.observe(c)});
+var secs=document.querySelectorAll("main>section"),links=document.querySelectorAll("#nv a");
+var so=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){var on=a.getAttribute("href")=="#"+e.target.id;a.classList.toggle("on",on);if(on){var nv=document.getElementById("nv");nv.scrollLeft=a.offsetLeft-(nv.clientWidth-a.offsetWidth)/2}})}})},{rootMargin:"-45% 0px -50% 0px"});
+secs.forEach(function(s){so.observe(s)});
+var sw=document.getElementById("sw"),dt=document.getElementById("dt"),cs=sw.children;
+for(var k=0;k<cs.length;k++)dt.appendChild(document.createElement("i"));
+function dots(){var c=sw.scrollLeft+sw.clientWidth/2,b=0,m=1e9;for(var k=0;k<cs.length;k++){var d=Math.abs(cs[k].offsetLeft-sw.offsetLeft+cs[k].offsetWidth/2-c);if(d<m){m=d;b=k}}[].forEach.call(dt.children,function(x,k){x.classList.toggle("on",k==b)})}
+sw.addEventListener("scroll",dots,{passive:true});dots();
+sw.addEventListener("keydown",function(e){if(e.key=="ArrowRight")sw.scrollBy({left:300,behavior:"smooth"});if(e.key=="ArrowLeft")sw.scrollBy({left:-300,behavior:"smooth"})});
+</script><script>(function(){
+var G=[["Ausgangslage","#F1E9D8","#00366F"],["Strategie","#1E7FD8","#FFFFFF"],["Umsetzung","#F39200","#00366F"]];
+var D=[
+[0,"Readiness","Nutzen wir bereits soziale Medien?","R+V ist bereits auf mehreren Plattformen aktiv.",[["4 Plattformen","Instagram, TikTok, LinkedIn und YouTube"],["„Wir sind R+V“","Mitarbeitende in einer LinkedIn-Reihe"]],["Freigabe und Community Management vor dem Start klären.","Eine Social-Media-Leitlinie zu Netiquette, Freigabe, Einzelfällen und Mitarbeitenden mit R+V abstimmen."]],
+[0,"Monitoring","Was wird über uns geredet?","Die Themen sind sichtbar, die Kennzahlen fehlen noch.",[["Rente · Kindergeld","aktuelle TikTok-Themen"],["~24.500","LinkedIn-Follower (Momentaufnahme)"],["99 Videos","auf YouTube in einer Branchenstudie"],["Seit 2019","Instagram-Auftritt"]],["Baseline-Audit im Okt.–Nov. 2026: Frequenz, Engagement, Reaktionszeit und Follower je Kanal erheben."]],
+[0,"Ressourcen","Welche Ressourcen haben wir, brauchen wir externe Hilfe?","Externe Unterstützung für Kampagne und Video ist vorhanden.",[["Ogilvy","Kampagnenagentur seit Juni 2024"],["Social-Ads","R+V ist dort stark präsent (Fachmedium)"]],["Social-Leitung, Redaktion, Grafik/Video, Community Management und Analytics einplanen.","Externe Hilfe für Video, Tool-Audit und Rechtsprüfung nutzen.","Werbebudget nach der Baseline und mit Kostenkennzahlen beantragen."]],
+[1,"Zielgruppe","Wer ist unsere eng umrissene Zielgruppe?","Familien und Berufseinsteiger tragen die Strategie.",[["76 %","der 30–49-Jährigen nutzen soziale Medien"],["88 %","der 16–29-Jährigen haben schon online abgeschlossen"],["57 %","der Online-Abschlüsse laufen über Vergleichsportale"],["34 % · 35 %","Online-Anteil bei privater Altersvorsorge und Berufsunfähigkeit: Beratung bleibt nötig"]],["Primär: Familie startet (28–42 Jahre, Kinder, Immobilie) und Berufsstart (22–30 Jahre, erstes Einkommen).","Sekundär: Bestandskunden, Nachwuchs (Ausbildung), Betriebe und Firmenkunden. Best Ager (60+) nur über Facebook-Paid.","Aufgabe Familie startet: Vertrauen aufbauen, Familienvorsorge erklären, zur Beratung überleiten. Aufgabe Berufsstart: Basiswissen vermitteln, zum Vorsorge-Check führen."]],
+[1,"Ziele","Was wollen wir erreichen?","Vom Unternehmensziel zum Social-Media-Ziel.",[["> 25 Mrd. €","Beitragsziel bis 2030"],["Familienvorsorge","Ziel: führender Partner bis 2030"]],["Kommunikationsziel: „Du bist nicht allein“ konkret erlebbar machen und Vorsorge verständlich vermitteln.","Ziel Reichweite: Bekanntheit bei Familien und Berufseinsteigern steigern. Kennzahlen: Reichweite (Unique Reach) und Video-Views.","Ziel Vertrauen: Vorsorge verständlich erklären. Kennzahlen: Watch Time, Saves, Shares.","Ziel Beratung: Übergang in Beratung und ruv.de schaffen. Kennzahlen: Klickrate, Beratungskontakte, Kosten pro Lead.","Sekundär: Community-Service (Reaktionszeit, Antwortquote) und Employer Branding (Klicks auf die Karriere-Seite).","Sollwerte nicht schätzen: erst nach der Baseline (bis 30.11.2026) festlegen, jeweils mit Zeitraum. Follower und Likes nur als Kontext."]],
+[1,"Inhalte","Was interessiert unsere Zielgruppe?","Sechs Content-Pillars, jeder mit klarem Nutzen.",[["Kindergeld · Rente","bestehende TikTok-Themen"],["Kindersuchbänder","bestehende Kooperation"],["„Wir sind R+V“","bestehende LinkedIn-Reihe"]],["Sechs Content-Pillars mit Bedürfnis, Format und Aktion: siehe Abschnitt Content.","Inhalte im Pilot per Vergleichstest (A/B-Test) prüfen."]],
+[2,"Tonalität","Wie sprechen wir mit unseren Fans und Followern?","Warm im Ton, klar in der Sache.",[["Du bist nicht allein","Markenclaim mit genossenschaftlichen Wurzeln"]],["Instagram warm mit Du-Ansprache, YouTube ruhig, LinkedIn professionell, TikTok locker ohne Fehlinformation.","Erklären in vier Schritten: Nutzen, Kerninfo, Vorbehalt, Link. Einschränkungen nie streichen.","Kritik sachlich beantworten, Einzelfälle in den privaten Servicekanal überführen."]],
+[2,"Wachstum","Woher kommen unsere Fans und Follower?","Organisch für Vertrauen, Paid für Tempo.",[["+3 Prozentpunkte","Das Wachstum der Social-Media-Nutzung schwächt sich ab"]],["Aufmerksamkeit über ruv.de, Berater, Familienevents, QR-Codes und Newsletter.","Kooperationen mit dem Verbund nutzen, Mitarbeitende freiwillig als Botschafter einbinden.","Paid: Reichweite beim Start, Retargeting nur mit Einwilligung, Leads nur für Beratungstermine."]],
+[2,"Einführung","Wer muss an der Einführung beteiligt werden?","Erst klären, dann starten.",[["Datenschutz (DSGVO)","Business-Accounts: gemeinsame Verantwortung mit Meta"],["Werbekennzeichnung","§ 5a UWG: Werbung klar als solche kennzeichnen"],["Impressum","in jedem Profil erforderlich"]],["Marketing, Vertrieb, Service, Recht, Datenschutz, HR und Management beteiligen.","Verantwortlichkeiten verteilen (RACI: durchführend, verantwortlich, konsultiert, informiert) und über die Leitlinie schulen.","Versicherungsrechtliche Vorgaben (Versicherungsvertragsgesetz, IDD, BaFin) mit der R+V-Compliance klären.","Kanal stoppen bei dauerhaft zu schwacher Wirkung, unverhältnismäßigem Aufwand oder nicht beherrschbarem Risiko."]]
+];
+var N=D.length,cur=0,sv=document.getElementById("sv"),pn=document.getElementById("pn");
+function pt(r,a){var t=(a-90)*Math.PI/180;return[200+r*Math.cos(t),200+r*Math.sin(t)]}
+function arc(r1,r2,a1,a2){var p1=pt(r2,a1),p2=pt(r2,a2),p3=pt(r1,a2),p4=pt(r1,a1);return"M"+p1+"A"+r2+","+r2+" 0 0 1 "+p2+"L"+p3+"A"+r1+","+r1+" 0 0 0 "+p4+"Z"}
+var h="";
+G.forEach(function(g,i){h+='<path d="'+arc(203,207,i*120+2,i*120+118)+'" fill="'+g[1]+'"/>'});
+D.forEach(function(d,i){var a1=i*40+1.5,a2=i*40+38.5,g=G[d[0]],m=pt(150,i*40+20),r=(i*40+20-90)*Math.PI/180;
+h+='<g class="seg" data-i="'+i+'" data-t="translate('+(Math.cos(r)*10)+'px,'+(Math.sin(r)*10)+'px)" tabindex="0" role="button" aria-label="'+(i+1)+' '+d[1]+'"><path d="'+arc(100,196,a1,a2)+'" fill="'+g[1]+'"/><text x="'+m[0]+'" y="'+(m[1]-4)+'" text-anchor="middle" font-size="22" font-weight="800" fill="'+g[2]+'">'+(i+1)+'</text><text x="'+m[0]+'" y="'+(m[1]+14)+'" text-anchor="middle" font-size="11.5" font-weight="600" fill="'+g[2]+'">'+d[1]+'</text></g>'});
+h+='<circle cx="200" cy="200" r="88" fill="#0A4586" stroke="#2A6AB0"/><circle cx="200" cy="200" r="74" fill="none" stroke="#F39200" stroke-width="2"/><text x="200" y="192" text-anchor="middle" font-size="30" font-weight="800" fill="#F1E9D8">R+V</text><text x="200" y="212" text-anchor="middle" font-size="12" fill="#B9D0EA">Social-Media-</text><text x="200" y="228" text-anchor="middle" font-size="12" fill="#B9D0EA">Profil</text>';
+sv.innerHTML=h;
+function rec(r){return Array.isArray(r)?'<div class="cp">'+r.map(function(c){return'<span>'+c+'</span>'}).join("")+'</div>':'<div class="rc"><i>→</i><div>'+r+'</div></div>'}
+function show(i,scroll){cur=(i+N)%N;var d=D[cur],g=G[d[0]];
+sv.querySelectorAll(".seg").forEach(function(s,k){s.classList.toggle("on",k==cur);s.style.transform=k==cur?s.dataset.t:"none"});
+pn.style.animation="none";void pn.offsetWidth;pn.style.animation="";
+pn.innerHTML='<div class="tabs" id="tb">'+D.map(function(x,k){return'<button data-k="'+k+'" class="'+(k==cur?"on":"")+'" aria-label="Feld '+(k+1)+' '+x[1]+'">'+(k+1)+'</button>'}).join("")+'</div><div class="ph"><div class="nm" style="background:'+g[1]+';color:'+g[2]+'">'+(cur+1)+'</div><div><div class="gp">'+g[0]+'</div><h2>'+d[1]+'</h2></div></div><p class="qs">Leitfrage: '+d[2]+'</p><div class="hl">'+d[3]+'</div><div class="lb">Belege</div><div class="fs">'+d[4].map(function(f){return'<div class="ft2"><b>'+f[0]+'</b><span>'+f[1]+'</span></div>'}).join("")+'</div><div class="lb" style="color:var(--lb)">Empfehlung</div>'+d[5].map(rec).join("")+'<div class="nv"><button id="pv">← '+D[(cur+N-1)%N][1]+'</button><button id="nx">'+D[(cur+1)%N][1]+' →</button></div>';
+document.getElementById("pv").onclick=function(){show(cur-1,1)};document.getElementById("nx").onclick=function(){show(cur+1,1)};
+pn.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){show(+b.dataset.k,0)}});
+var on=pn.querySelector(".tabs .on");if(on)document.getElementById("tb").scrollLeft=on.offsetLeft-60;
+if(scroll&&innerWidth<900)pn.scrollIntoView({behavior:"smooth",block:"start"})}
+sv.querySelectorAll(".seg").forEach(function(s){s.onclick=function(){show(+s.dataset.i,1)};s.onkeydown=function(e){if(e.key=="Enter"||e.key==" "){e.preventDefault();show(+s.dataset.i,1)}}});
+document.getElementById("matrix").addEventListener("keydown",function(e){if(e.key=="ArrowRight")show(cur+1,0);if(e.key=="ArrowLeft")show(cur-1,0)});
+show(0,0);
+})();</script></body></html>
