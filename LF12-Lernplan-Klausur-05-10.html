@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LF 12 Lernplan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: eine Spalte. Kopf, Plan, abhakbare Einheiten, dann Lernstoff in Kapiteln mit Aufgaben, danach Nachschlageteil */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --fg:#17222b; --muted:#5a6873; --line:#d6dde3;
+  --accent:#0d6b6b; --accent-soft:#dcefee; --accent-fg:#ffffff;
+  --warn:#8a5a00; --warn-soft:#f8ecd2;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10171c; --surface:#18222a; --fg:#e6edf2; --muted:#93a3ae; --line:#2b3944;
+    --accent:#5cc8c0; --accent-soft:#17383a; --accent-fg:#08201f;
+    --warn:#f0c66b; --warn-soft:#3a2f14; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10171c; --surface:#18222a; --fg:#e6edf2; --muted:#93a3ae; --line:#2b3944;
+  --accent:#5cc8c0; --accent-soft:#17383a; --accent-fg:#08201f;
+  --warn:#f0c66b; --warn-soft:#3a2f14; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.55;padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:760px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+h1,h2,h3{text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:28px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:19px;font-weight:600;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:15px;font-weight:600}
+p{margin:0}
+.lead{color:var(--muted);max-width:65ch}
+.label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+header{display:flex;flex-direction:column;gap:14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.fact b{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--accent)}
+.fact span{font-size:13px;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:14px;min-width:0}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:460px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{font-family:var(--mono);white-space:nowrap}
+tr.sum td{font-weight:600}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.step p{font-size:13px;color:var(--muted)}
+.progress{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);padding-block:8px;display:flex;flex-direction:column;gap:6px;border-bottom:1px solid var(--line)}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.unit{background:var(--surface);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;min-width:0}
+.unit label{display:flex;gap:12px;padding:12px;cursor:pointer;align-items:flex-start}
+.unit input{margin-top:3px;width:18px;height:18px;accent-color:var(--accent);flex:none}
+.unit .t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.unit .t b{font-weight:600}
+.unit .meta{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.unit ul{margin:0;padding:0 12px 12px 42px;font-size:14px;color:var(--fg);display:flex;flex-direction:column;gap:4px}
+.unit li::marker{color:var(--muted)}
+.unit.done{background:var(--accent-soft)}
+.unit.done .t b{text-decoration:line-through;text-decoration-thickness:1px}
+.formulas{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.fbox{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fbox code,code.block{font-family:var(--mono);font-size:12.5px;line-height:1.55;display:block;white-space:pre-wrap;overflow-wrap:anywhere}
+.chapter{display:flex;flex-direction:column;gap:14px;min-width:0}
+.chapter > h2{font-size:21px}
+.chapter h3.sub{font-size:16px;margin-top:6px}
+.prose{display:flex;flex-direction:column;gap:10px;max-width:68ch}
+.prose ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
+.def{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 12px;font-size:14px}
+.task{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.task .q{font-size:14px;display:flex;flex-direction:column;gap:6px}
+.task .q ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.task details{background:var(--bg)}
+summary{cursor:pointer;padding:11px 12px;font-size:14px;list-style:none;display:flex;gap:10px;justify-content:space-between;align-items:flex-start}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"Lösung";flex:none;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+details[open] summary::after{content:"Schließen"}
+details .ans{padding:0 12px 12px;font-size:14px;color:var(--accent);overflow-wrap:anywhere;display:flex;flex-direction:column;gap:8px}
+details .ans.mono{font-family:var(--mono);font-size:13px;white-space:pre-wrap}
+details .ans .scroll{color:var(--fg)}
+summary:focus-visible,.unit input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.note{background:var(--warn-soft);color:var(--fg);border-left:3px solid var(--warn);padding:10px 12px;border-radius:0 6px 6px 0;font-size:14px}
+.note b{color:var(--warn)}
+ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:5px}
+button.reset{align-self:flex-start;font:inherit;font-size:13px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:6px 12px;cursor:pointer}
+button.reset:hover{color:var(--fg);border-color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="label">Lernfeld 12 · Kosten- und Leistungsrechnung · Klasse VF24-1,2</span>
+  <h1>Lernplan für die Klausur am Montag, 05.10.</h1>
+  <p class="lead">Version 6, komplett gegen deine Original-Scans geprüft. Alle Aufgaben stehen mit dem echten Aufgabentext, Rechenweg und Lösung auf dieser Seite. Du brauchst kein weiteres Dokument.</p>
+  <div class="facts">
+    <div class="fact"><b>05.10.</b><span>Klausur (heute)</span></div>
+    <div class="fact"><b>90 min</b><span>Rechnen + Wissen</span></div>
+    <div class="fact"><b>126 Werte</b><span>per Skript nachgerechnet</span></div>
+  </div>
+  <div class="note"><b>Wichtigste Korrektur:</b> Haus- und Grundstücksaufwand (Hypothekenzinsen, Abschreibung auf das Geschäftsgebäude, Renovierung im Geschäftshaus) ist laut Skript <b>immer neutraler Aufwand</b>, auch bei eigener Immobilie. Statt dessen setzt man eine <b>kalkulatorische Miete</b> als Zusatzkosten an. Viele deiner handschriftlichen Lösungen haben das als „Kosten“ stehen.</div>
+</header>
+
+<section>
+  <h2>Plan für den Klausurtag</h2>
+  <p class="lead">Wähle nach der Zeit, die du noch hast. Hake ab, was du erledigt hast.</p>
+  <div class="progress"><span class="label" id="ptext">0 erledigt</span><div class="bar"><i id="pbar"></i></div></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Zeit bis Klausur</th><th>Was du machst</th></tr></thead>
+    <tbody>
+      <tr><td class="num">20 min</td><td>Nur „Die 12 wichtigsten Regeln“ und „Formelsammlung“ lesen</td></tr>
+      <tr><td class="num">60 min</td><td>Regeln + Marks (Kap. 2) + Krause Ergebnisbogen (Kap. 5) + S20 und DB Aufgabe 1 (Kap. 6)</td></tr>
+      <tr><td class="num">2 h und mehr</td><td>Alle Blöcke unten in der Reihenfolge</td></tr>
+    </tbody>
+  </table></div>
+  <div class="unit"><label><input type="checkbox" data-k="c0"><span class="t"><b>Die 12 wichtigsten Regeln</b><span class="meta">10 min · direkt unten</span></span></label></div>
+  <div class="unit"><label><input type="checkbox" data-k="c1"><span class="t"><b>Kapitel 1 und 2 · Grundbegriffe, Abgrenzung</b><span class="meta">30 min</span></span></label>
+    <ul><li>Zuordnungsübersicht zuhalten und aufsagen</li><li>Marks ohne Lösung rechnen</li></ul></div>
+  <div class="unit"><label><input type="checkbox" data-k="c2"><span class="t"><b>Kapitel 3 · Grund-, Anders-, Zusatzkosten</b><span class="meta">30 min</span></span></label>
+    <ul><li>Zuordnungsaufgabe a–i, S15, S16, S18, Kfz</li></ul></div>
+  <div class="unit"><label><input type="checkbox" data-k="c3"><span class="t"><b>Kapitel 4 · Einzel-/Gemeinkosten, fix/variabel</b><span class="meta">25 min</span></span></label>
+    <ul><li>Krause Einzel/Gemein, Nagel-Meyer</li></ul></div>
+  <div class="unit"><label><input type="checkbox" data-k="c4"><span class="t"><b>Kapitel 5 · Ergebnisbogen</b><span class="meta">40 min</span></span></label>
+    <ul><li>Krause, A6.4, S19: erst selbst, dann Lösung vergleichen, immer mit Probe</li></ul></div>
+  <div class="unit"><label><input type="checkbox" data-k="c5"><span class="t"><b>Kapitel 6 · Deckungsbeitrag</b><span class="meta">35 min</span></span></label>
+    <ul><li>S20, DB Aufgabe 1, DB Aufgabe 2 (Müller, Meier, Schmitz)</li></ul></div>
+  <div class="unit"><label><input type="checkbox" data-k="c6"><span class="t"><b>Kapitel 7 · Karteikarten</b><span class="meta">20 min</span></span></label></div>
+  <div class="note"><b>In der Klausur (90 min):</b> 3 min Überblick · 20 min Wissensfragen · 40 min Ergebnisrechnung · 20 min DB · 7 min Kontrolle. Sichere Punkte zuerst. Bei jeder Rechenaufgabe die Probe schreiben (Zeile steht in Kap. 2).</div>
+  <button class="reset" id="reset" type="button">Häkchen zurücksetzen</button>
+</section>
+
+<section>
+  <h2>Die 12 wichtigsten Regeln</h2>
+  <ul class="plain">
+    <li><b>Kosten</b> = betriebsbedingt + ordentlich + periodenbezogen. Fehlt eines, ist es <b>neutral</b>.</li>
+    <li><b>Betriebsergebnis</b> = Leistungen − Kosten. <b>Unternehmensergebnis</b> = Erträge − Aufwendungen. <b>Neutrales Ergebnis</b> = neutrale Erträge − neutrale Aufwendungen.</li>
+    <li><b>Haus- und Grundstücksaufwand/-ertrag</b> (Hypothekenzinsen, Abschreibung Gebäude, Mieteinnahmen) = <b>immer neutral</b>.</li>
+    <li><b>Zinserträge</b>, Kassenüberschuss, außerordentlicher Ertrag = neutraler Ertrag. <b>Provisionserträge</b> = Leistung.</li>
+    <li><b>Gewerbesteuer</b> ist in der KLR immer betriebsbedingt.</li>
+    <li><b>Grundkosten</b>: Kosten = Aufwand. <b>Anderskosten</b>: Aufwand gebucht, aber anderer Wert (kalk. Abschreibung, kalk. Zinsen). <b>Zusatzkosten</b>: kein Aufwand (Unternehmerlohn, kalk. Miete).</li>
+    <li>Bei Anderskosten den <b>gebuchten Aufwand aus den Grundkosten streichen</b>, sonst doppelt.</li>
+    <li>Kalk. Abschreibung = Wiederbeschaffungswert : Nutzungsdauer. Im Anschaffungsjahr nur anteilig (Monate : 12).</li>
+    <li>Kalk. Zinsen = betriebsnotwendiges Kapital × Zinssatz. Bestände als Durchschnitt aus Anfang und Ende.</li>
+    <li><b>Einzelkosten</b> direkt zurechenbar, <b>Gemeinkosten</b> nur über Schlüssel.</li>
+    <li><b>Deckungsbeitrag</b> = Erlös − variable Kosten. Betriebsergebnis = Σ DB − Fixkosten.</li>
+    <li>Negatives <b>Vollkostenergebnis</b> heißt noch nicht „aufgeben“. Entscheidend ist der DB.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Was laut Mail drankommt</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Thema (Mail Frau Hansen, 29.09.)</th><th>Kapitel</th></tr></thead>
+    <tbody>
+      <tr><td>Abgrenzung Kosten/Leistungen zu Aufwendungen/Erträgen</td><td class="num">2</td></tr>
+      <tr><td>Grund-, Anders-, Zusatzkosten</td><td class="num">3</td></tr>
+      <tr><td>Einzel-/Gemeinkosten, fixe/variable Kosten</td><td class="num">4</td></tr>
+      <tr><td>Unternehmens-, Betriebs-, neutrales Ergebnis</td><td class="num">2, 5</td></tr>
+      <tr><td>Deckungsbeitragsrechnung (Teilkostenrechnung)</td><td class="num">6</td></tr>
+      <tr><td>Alle Inhalte zur KLR</td><td class="num">1–7</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- KAPITEL 1 -->
+<section class="chapter">
+  <h2>1 · Grundlagen: Wozu KLR?</h2>
+  <div class="prose">
+    <p>Das <b>externe Rechnungswesen</b> (Finanzbuchhaltung, GuV) ist gesetzlich vorgeschrieben. Die <b>Kosten-Leistungsrechnung</b> (internes Rechnungswesen) möchte wissen, <i>welche Kosten entstanden sind</i> (Kostenartenrechnung) und <i>wo in der Agentur sie entstanden sind</i> (Kostenstellenrechnung). Sie zeigt, ob die eigentliche Vermittlungs- und Betreuungstätigkeit Gewinn bringt. Das <b>Betriebsergebnis</b> ist deshalb wichtiger als das Unternehmensergebnis.</p>
+  </div>
+  <div class="steps">
+    <div class="step"><h3>Schritt 1</h3><p>Sachliche Abgrenzung: Kosten/Leistungen von neutralen Posten trennen (KEB, LEB)</p></div>
+    <div class="step"><h3>Schritt 2</h3><p>Kosten (Grund-, Anders-, Zusatzkosten) und Leistungen ermitteln</p></div>
+    <div class="step"><h3>Schritt 3</h3><p>Betriebsergebnis im Ergebnisbogen</p></div>
+  </div>
+  <h3 class="sub">Glossar</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+    <tbody>
+      <tr><td>Ausgaben</td><td>alle baren und unbaren Geldflüsse einer Periode</td></tr>
+      <tr><td>Aufwand</td><td>gesamter in Geld gemessener Werteverzehr an Gütern und Dienstleistungen in der Periode</td></tr>
+      <tr><td>Kosten</td><td>in Geld gemessener <b>betriebsbedingter</b> Güter- und Leistungsverzehr zur Erstellung betrieblicher Leistungen</td></tr>
+      <tr><td>Einnahmen</td><td>alle baren und unbaren Geldzuflüsse einer Periode</td></tr>
+      <tr><td>Ertrag</td><td>gesamter in Geld gemessener erfolgswirksamer Wertzuwachs der Periode</td></tr>
+      <tr><td>Leistungen</td><td>entstehen durch die betriebliche Tätigkeit (bei Agenturen v. a. Provisionserträge)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="def"><b>Nicht jede Ausgabe ist Aufwand</b> (zeitliche Abgrenzung nötig). <b>Nicht jeder Aufwand ist Kosten</b> (sachliche Abgrenzung nötig). Genauso: Nicht jede Einnahme ist Ertrag, nicht jeder Ertrag ist Leistung.<br>Beispiel Ausgabe ohne Aufwand: Computer per Banküberweisung gekauft (Aktivtausch). Beispiel Einnahme/Ertrag: Folgeprovision Dezember 600 € und Januar 630 € werden im Dezember überwiesen. Einnahme 1.230 €, Ertrag des Jahres nur 600 €.</div>
+  <div class="task"><div class="q"><b>Büroschrank:</b> Kauf am 1. Juli für 1.300 €, steuerlich 13 Jahre linear. Erwartet wird ein um 10 % höherer Wiederbeschaffungspreis. Aufwand und Kosten im Kaufjahr?</div>
+    <details><summary>Lösung</summary><div class="ans mono">Aufwand: 1.300 : 13 = 100 pro Jahr · 6/12 × 100 = 50
+Kosten: 100 × 1,10 = 110 pro Jahr · 6/12 × 110 = 55
+Unterschied 5 € = Anderskosten</div></details></div>
+</section>
+
+<!-- KAPITEL 2 -->
+<section class="chapter">
+  <h2>2 · Sachliche Abgrenzung und die drei Ergebnisse</h2>
+  <div class="def"><b>Kosten/Leistung nur, wenn alle drei zutreffen:</b> betriebsbedingt (z. B. Gehälter), normal/ordentlich (regelmäßig, z. B. Provisionsaufwand), periodenbezogen (nur dieses Geschäftsjahr, z. B. Jahres-Kfz-Steuer). Wird <b>nur eine</b> Eigenschaft nicht erfüllt, ist es neutral.</div>
+  <h3 class="sub">Vier Arten neutraler Aufwendungen und Erträge</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Art</th><th>Aufwand</th><th>Ertrag</th></tr></thead>
+    <tbody>
+      <tr><td><b>betriebsfremd</b></td><td>Verluste bei Kapitalanlagen, Hypothekenzinsen, Instandhaltung Immobilie</td><td>Zinserträge, Gewinne aus Kapitalanlagen, Mieterträge</td></tr>
+      <tr><td><b>periodenfremd</b></td><td>Begleichung einer Handwerkerleistung aus dem Vorjahr, Steuernachzahlung Vorjahr</td><td>Erstattung zu viel gezahlter Kfz-Steuer des Vorjahres</td></tr>
+      <tr><td><b>betriebsgelegentlich</b></td><td>Verlust beim Verkauf von Anlagevermögen (unter Buchwert)</td><td>Verkauf von Anlagegütern über Buchwert</td></tr>
+      <tr><td><b>außerordentlich</b></td><td>Geldunterschlagung durch Mitarbeiter, Brand/Unfall-Schaden</td><td>Schenkung an die Agentur</td></tr>
+    </tbody>
+  </table></div>
+  <h3 class="sub">Zuordnungsübersicht Aufwand und Kosten (Original aus dem Skript)</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Neutraler Aufwand</th><th>Betrieblicher Aufwand</th><th>Grundkosten</th><th>Anderskosten</th><th>Zusatzkosten</th></tr></thead>
+    <tbody>
+      <tr><td>AoA außerordentl. Aufw.<br>HuGA Haus- u. Grundstücksaufw.<br>KDiffA Kassendifferenzaufw.</td>
+          <td>AbA Abschreibung Anlagen<br>AbKfz<br>AbGWG<br>ZA Zinsaufwand<br>EgieA Energieaufw.<br>Gehälter<br>KfzA<br>MietA<br>PA Provisionsaufw.<br>SozA<br>SteuA<br>VerwA<br>WuRA Werbe-/Reiseaufw.</td>
+          <td>EgieA<br>Gehälter<br>KfzA<br>MietA<br>PA<br>SozA<br>SteuA<br>VerwA<br>WuRA</td>
+          <td>kalk. AbA<br>kalk. AbKfz<br>kalk. AbGWG<br>kalk. Zinsen</td>
+          <td>kalk. Unternehmerlohn<br>kalk. Miete<br>kalk. Zinsen*</td></tr>
+    </tbody>
+  </table></div>
+  <p class="lead">* nur wenn kein Zinsaufwand in der Finanzbuchhaltung steht. Merke: Abschreibungen und Zinsaufwand sind betrieblicher Aufwand, aber <b>keine</b> Grundkosten. Sie werden durch die kalkulatorischen Werte (Anderskosten) ersetzt.</p>
+  <h3 class="sub">Zuordnung Ertrag und Leistung</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Neutraler Ertrag</th><th>Betrieblicher Ertrag</th><th>Leistung</th></tr></thead>
+    <tbody><tr><td>AoE außerordentl. Ertrag<br>HuGE Haus- u. Grundstücksertrag<br>KDiffE Kassendifferenzertrag<br>ZE Zinsertrag</td><td>PE Provisionsertrag</td><td>PE (Grundleistung). Zusatzleistungen: kalkulierte Beträge für unentgeltliche Leistungen</td></tr></tbody>
+  </table></div>
+  <div class="def"><b>Die drei Ergebnisse und die Probe</b><br>UE = Erträge − Aufwendungen · BE = Leistungen − Kosten · NE = neutr. Erträge − neutr. Aufwendungen<br>Probe ohne kalk. Kosten: UE = BE + NE<br>Probe mit kalk. Kosten: <b>UE = BE + NE + (Kosten − betriebliche Aufwendungen)</b></div>
+
+  <h3 class="sub">Aufgabe Marks (GuV 2025, Tabelle)</h3>
+  <div class="task"><div class="q">Aufwand: Personal 7.800, Verwaltung 4.800, Steuern 9.500 (davon 1.100 Nachzahlung Vorjahr), Werbe/Reise 12.200, Kfz 1.000, Zinsaufwand 2.000 (Kredit für die <b>vermietete Wohnung</b>), Miete 7.200, Energie 2.500, Abschreibungen 2.600. Erträge: Provisionen 67.000, Zinserträge 2.000, Mieterträge 9.600, Ertrag aus Abgang AV 500. Bestimme Gewinn, neutrales Ergebnis, Betriebsergebnis.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Neutraler Aufwand: 1.100 (periodenfremd) + 2.000 (betriebsfremd) = 3.100
+Neutraler Ertrag: 2.000 + 9.600 (betriebsfremd) + 500 (außerordentlich) = 12.100
+Aufwand gesamt 49.600 · Ertrag gesamt 79.100 → Gewinn 29.500
+Kosten: 49.600 − 3.100 = 46.500 (Steuern als Kosten: 8.400)
+Leistung: 67.000
+Betriebsergebnis: 67.000 − 46.500 = 20.500
+Neutrales Ergebnis: 12.100 − 3.100 = 9.000
+Probe: 20.500 + 9.000 = 29.500 ✓
+Antwort auf die Frage: Ja, die Tätigkeit als Vermittler hat sich gelohnt (+20.500).</div></details></div>
+
+  <h3 class="sub">Aufgabe: Ertrag oder Aufwand zuordnen</h3>
+  <div class="task"><div class="q">Betriebsbedingt oder neutral (betriebsfremd) oder weder noch?</div>
+    <details><summary>Lösung</summary><div class="ans mono">Erträge
+Bank schreibt 200 Zinsen gut → neutral (betriebsfremd)
+Abschlussprovisionen 500 → betriebsbedingt
+Kassenüberschuss 40 → neutral
+Voll abgeschriebener Farbdrucker für 30 verkauft → neutral (betriebsgelegentlich)
+Bonifikation 1.200 wegen Zielerreichung → betriebsbedingt
+Zuschüsse/Garantien 1.000 von der Direktion → betriebsbedingt
+Aufwendungen
+Verunfallter Dienstwagen weit unter Marktwert verkauft → neutral
+250 Provision an Untervertreter → betriebsbedingt
+Kleinschaden 120 bar reguliert → weder noch (für die Direktion reguliert)
+PC (Restwert 150) für 100 verkauft → neutral (Verlust 50)
+Hypothekenzinsen 500 auf dem Geschäftshaus → neutral (HuGA)
+Werbematerial 100 von der Direktion → betriebsbedingt
+Einbehaltene Steuern und Sozialabgaben 1.400 abgeführt → weder noch (Zahlung, Aufwand schon als Gehalt gebucht)</div></details></div>
+
+  <h3 class="sub">Aufgabe: b / o / p ankreuzen</h3>
+  <div class="task"><div class="q">Kosten (K), neutraler Aufwand (nA) oder weder noch?</div>
+    <details><summary>Lösung</summary><div class="ans mono">Hypothekenzinsen Geschäftshaus → nA (HuGA)
+Steuernachzahlung Vorjahr → b ja, o ja, p nein → nA (periodenfremd)
+Abschreibung auf das Geschäftsgebäude → nA (HuGA)
+Provision Untervertreter per Bank → K (b, o, p ja)
+Geschäftswagen zu Schrott gefahren → b ja, p ja, o nein → nA (außerordentlich)
+Kfz-Steuer Geschäftswagen → K
+Kfz-Steuer Privatwagen → weder noch (Privatentnahme)
+Barkauf neuer Computer → weder noch (Aktivtausch)
+Regulierungsaufwand 500 (Agentur lässt sich den Betrag als Gebühr erstatten) → weder noch
+Hinweis: In deinen alten Kreuzen standen Hypothekenzinsen und Gebäude-Abschreibung als K. Das ist falsch.</div></details></div>
+
+  <h3 class="sub">Aufgabe Krause: GuV Vorjahr, Abgrenzung und Vergleich</h3>
+  <div class="task"><div class="q">Aufwand: Provision 53.578, Miete 21.000, Werbe-/Reise 5.400, Verwaltung 9.400, Kfz 1.900, Abschreibung Kfz 2.000, Zinsaufwand 1.600, Steuern 6.822, außerordentlich 2.600. Erträge: Provision 180.000, Zinsertrag 9.300, außerordentlich 6.500. Vergleiche mit dem laufenden Jahr: Gesamtergebnis 89.400, neutrales Ergebnis 5.000, Betriebsergebnis 84.400.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Aufwand 104.300, Erträge 195.800 → Gewinn 91.500
+Kosten: 104.300 − 2.600 = 101.700
+Leistung: 180.000
+Betriebsergebnis: 180.000 − 101.700 = 78.300
+Neutrales Ergebnis: 15.800 − 2.600 = 13.200
+Probe: 78.300 + 13.200 = 91.500 ✓
+Vergleich (jetzt − Vorjahr):
+Gesamtergebnis 89.400 − 91.500 = −2.100
+Neutrales Ergebnis 5.000 − 13.200 = −8.200
+Betriebsergebnis 84.400 − 78.300 = +6.100
+Aussage: Das Gesamtergebnis ist schlechter, das Betriebsergebnis aber besser. Der Rückgang kommt nur vom neutralen Ergebnis. Das Kerngeschäft läuft besser. Zinsaufwand ist hier betrieblich.</div></details></div>
+</section>
+
+<!-- KAPITEL 3 -->
+<section class="chapter">
+  <h2>3 · Grund-, Anders-, Zusatzkosten und kalkulatorische Kosten</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Art</th><th>Merkmal</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td><b>Grundkosten</b> (Zweckaufwand)</td><td>aufwandsgleich: betriebsbedingter Aufwand = Kosten</td><td>Gehälter, Miete, Provisionsaufwand</td></tr>
+      <tr><td><b>Anderskosten</b></td><td>aufwandsungleich: Aufwand gebucht, KLR rechnet anders</td><td>kalk. Abschreibung (tatsächlicher Wertverlust oder Wiederbeschaffungswert), kalk. Zinsen</td></tr>
+      <tr><td><b>Zusatzkosten</b></td><td>aufwandslos: keine Buchung in der Finanzbuchhaltung</td><td>kalk. Unternehmerlohn, kalk. Miete, kalk. Zinsen (wenn kein Zinsaufwand)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="def"><b>Kalk. Abschreibung:</b> erfasst den tatsächlichen Wertverlust, den die steuerlichen Sätze oft verfälschen, und das Mehr an Wiederbeschaffungskosten (Preisanstieg) für die Ersatzinvestition. <b>Kalk. Zinsen:</b> Das eingesetzte Kapital hätte am Markt Zinsen gekostet, deshalb werden Zinsen angesetzt. Basis ist das <b>betriebsnotwendige Kapital</b> aus der Vermögensseite. Unverzinsliches Fremdkapital (Abzugskapital) wird herausgerechnet. <b>Kalk. Unternehmerlohn:</b> fiktives Gehalt des Inhabers, weil für ihn keine Aufwandsbuchung vorgesehen ist. <b>Kalk. Miete:</b> bei eigenem oder privatem Gebäude, orientiert an der Miete für vergleichbare Büroräume.</div>
+
+  <h3 class="sub">Zuordnung: Grundkosten, Anderskosten, Zusatzkosten oder neutral</h3>
+  <div class="task"><div class="q">Neun Geschäftsfälle (Übungsaufgabe Schritt 2).</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) Ordner zerstören Einrichtung, zusätzlich 400 abgeschrieben → neutraler Aufwand
+b) 250 Provision an Untervertreter gutgeschrieben → Grundkosten
+c) Mietwert der Büroräume im Gebäude des Inhabers, 1.800 → Zusatzkosten
+d) Büroschrank (Buchwert 1.600) für 1.400 verkauft → neutraler Aufwand (200 Verlust)
+e) Fahrtkostenzuschuss 30 an Angestellten → Grundkosten
+f) Kassenmanko 50 → neutraler Aufwand
+g) 6 % Verzinsung des betriebsnotwendigen Kapitals → Anderskosten (Zusatzkosten, wenn kein Zinsaufwand gebucht)
+h) Rückstellung für Prozesskosten 700 → neutraler Aufwand
+i) Laptop steuerlich 20 %, tatsächlicher Wertverlust 33,3 % → Anderskosten</div></details></div>
+
+  <h3 class="sub">S15 · Geschäftswagen</h3>
+  <div class="task"><div class="q">Generalagentur Krause kauft Anfang Juli einen Geschäftswagen für 18.000 €, Nutzungsdauer 6 Jahre, linear. a) bilanzieller Abschreibungsbetrag für dieses Geschäftsjahr? b) kalkulatorischer Betrag bei erwartetem Wiederbeschaffungspreis von 110 % des jetzigen Preises?</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) 18.000 : 6 = 3.000 pro Jahr · Juli bis Dezember = 6/12 → 1.500
+b) Wiederbeschaffung: 18.000 × 1,10 = 19.800
+   19.800 : 6 = 3.300 pro Jahr · 6/12 → 1.650
+Anderskosten-Differenz: 150</div></details></div>
+
+  <h3 class="sub">S16 · Dezember (9 Geschäftsfälle)</h3>
+  <div class="task"><div class="q">1. Laserdrucker (Buchwert 1 €) für 30 € verkauft · 2. Provisionsgutschrift 2.300 · 3. Provisionsrückbelastung 190 · 4. Einkommensteuervorauszahlung 2.600 · 5. Werbematerial 180 · 6. Ein VN überweist Erstbeitrag 330 an die Agentur statt an die Direktion · 7. Untervertreter: 120 noch nicht gebuchte Provision bar bezahlt · 8. Garagenmiete Geschäftswagen 80 · 9. Untervertreter Ahrend zahlt 50 Dezember-Zinsrate für ein Darlehen der Agentur. a) Summe der Kosten, b) Summe der Leistungen, c) neutraler Erfolg.</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) Kosten: 180 (Werbematerial) + 120 (Provision) + 80 (Garage) = 380
+b) Leistungen: 2.300 − 190 (Rückbelastung kürzt die Leistung) = 2.110
+c) Neutraler Ertrag: (30 − 1) + 50 Zinsertrag = 79
+   Neutraler Aufwand: 2.600 (Einkommensteuer, privat)
+   Neutraler Erfolg: 79 − 2.600 = −2.521
+Nr. 6: kein Aufwand, kein Ertrag → weder noch (Geld gehört der Direktion)</div></details></div>
+
+  <h3 class="sub">S18 · Kalkulatorische Zinsen</h3>
+  <div class="task"><div class="q">Betriebs- und Geschäftsausstattung: kalk. Wiederbeschaffungskosten 26.000, bisherige kalk. Abschreibung 13.000. Kfz 5.000 (kalk. Restwert = Buchwert). Forderungen gegen Direktion durchschnittlich 4.500. Verbindlichkeiten bei Untervertretern durchschnittlich 2.200. Bankguthaben zwischen 3.000 und 3.600. Kasse zwischen 1.400 und 1.600. Eigenkapital 20.000. a) betriebsnotwendiges Anlagevermögen, b) betriebsnotwendiges Kapital, c) Zinsen bei 6 %, d) Begründung.</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) Anlagevermögen: (26.000 − 13.000) + 5.000 = 18.000 (Restwert, nicht Anschaffung!)
+b) Umlaufvermögen: 4.500 + (3.000 + 3.600) : 2 + (1.400 + 1.600) : 2
+   = 4.500 + 3.300 + 1.500 = 9.300
+   Betriebsnotwendiges Vermögen: 18.000 + 9.300 = 27.300
+c) 27.300 × 6 % = 1.638
+   Variante mit Abzugskapital: 27.300 − 2.200 = 25.100 → × 6 % = 1.506
+d) Begründung: In der KLR soll der tatsächliche Kapitaleinsatz zur Leistungserstellung verzinst werden, unabhängig von der Herkunft (Eigen- oder Fremdkapital). Das Eigenkapital steht dem Unternehmer zinslos zur Verfügung, hätte aber am Kapitalmarkt Zinsen gebracht. Der Eigenkapitalbetrag 20.000 wird nicht gebraucht, die Rechnung geht über die Vermögensseite.</div></details></div>
+  <div class="note"><b>Unsicher:</b> Die Lehrer-Lösung auf deinem Foto lautet 1.638 (ohne Abzug der 2.200). Deine Mitschrift sagt, zinsloses Fremdkapital (Abzugskapital) wird herausgerechnet, das ergäbe 1.506. Schreibe in der Klausur beide Zwischenschritte hin: Vermögen 27.300, dann Abzugskapital nur abziehen, wenn die Aufgabe ausdrücklich zinsfreie Verbindlichkeiten nennt und danach fragt.</div>
+
+  <h3 class="sub">Kfz-Beispiel</h3>
+  <div class="task"><div class="q">Kfz für 30.000 angeschafft, 6 Jahre Nutzungsdauer. Finanzbuchhaltung linear. KLR: 16 2/3 % vom geschätzten Wiederbeschaffungswert 33.000. Bilanzieller und kalkulatorischer Buchwert zu Beginn des 3. Jahres und am Ende des 3. Jahres?</div>
+    <details><summary>Lösung</summary><div class="ans mono">Bilanziell: 30.000 : 6 = 5.000 pro Jahr
+Beginn 3. Jahr: 30.000 − 2 × 5.000 = 20.000 · Ende 3. Jahr: 15.000
+Kalkulatorisch: 33.000 × 16 2/3 % = 33.000 : 6 = 5.500 pro Jahr
+Beginn 3. Jahr: 33.000 − 2 × 5.500 = 22.000 · Ende 3. Jahr: 16.500</div></details></div>
+
+  <h3 class="sub">Aufgabe 3: Dezember in der Agentur (Kosten, betrieblich, neutral)</h3>
+  <div class="task"><div class="q">a) Provisionen Untervertreter 1.190 · b) lineare Abschreibung (1. Jahr) auf Anlagegut, AK 1.600, 8 Jahre, Wiederbeschaffung 1.760 · c) Rückstellung Prozesskosten 900 · d) Telefon 330, davon 30 % privat · e) Schreibtisch (Buchwert 250) für 190 verkauft · f) Büromaterial 130, Hypothekenzinsen 420 · g) Kassenfehlbetrag 80 · h) Garagenmiete 50, Büromaterial 30, Renovierung der Privatwohnung des Generalagenten im Geschäftshaus 1.680, Fachzeitschrift 10 · i) Gehälter 3.400 + sozialer Aufwand 480 · j) Büromiete 1.450. Summe betriebliche Aufwendungen, neutrale Aufwendungen, Kosten?</div>
+    <details><summary>Lösung</summary><div class="ans mono">Betriebliche Aufwendungen:
+1.190 + 200 (1.600 : 8) + 231 (70 % von 330) + 130 + 50 + 30 + 10 + 3.400 + 480 + 1.450 = 7.171
+Neutrale Aufwendungen:
+900 (Rückstellung) + 60 (Verlust Schreibtisch 250 − 190) + 420 (Hypothekenzinsen, HuGA) + 80 (Kassenfehlbetrag) + 1.680 (Renovierung Privatwohnung, HuGA) = 3.140
+Kosten: 7.171 − 200 + 220 (kalk. 1.760 : 8, Anderskosten) = 7.191
+Der Privatanteil Telefon (99) ist Privatentnahme, kein Aufwand.</div></details></div>
+  <div class="note"><b>Unsicher:</b> Die Renovierung der Privatwohnung 1.680 hast du handschriftlich von „neutral“ auf „Kosten“ geändert. Nach Regel (Privatwohnung, Haus- und Grundstücksaufwand) gehört sie zu den neutralen Aufwendungen. Ohne sie wären die neutralen Aufwendungen 1.460.</div>
+</section>
+
+<!-- KAPITEL 4 -->
+<section class="chapter">
+  <h2>4 · Einzel-/Gemeinkosten, fixe/variable Kosten</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Begriff</th><th>Merkmal</th><th>Beispiel</th></tr></thead>
+    <tbody>
+      <tr><td>Einzelkosten</td><td>können dem Kostenträger direkt zugeordnet werden</td><td>Vermittlungsprovision für Untervertreter</td></tr>
+      <tr><td>Gemeinkosten</td><td>können dem Kostenträger nicht direkt zugeordnet werden</td><td>Energiekosten, Miete</td></tr>
+      <tr><td>fixe Kosten</td><td>ändern sich nicht bei Änderung des Beschäftigungsgrades</td><td>Gehälter, Versicherungsbeiträge, Miete</td></tr>
+      <tr><td>variable Kosten</td><td>ändern sich mit dem Beschäftigungsgrad</td><td>Provisionsaufwand, Werbe-/Reiseaufwand</td></tr>
+      <tr><td>Mischkosten</td><td>fixe und variable Bestandteile</td><td>Telefon, Strom (Grundgebühr + Verbrauch)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="def"><b>Kostenträger</b> einer Agentur sind Vertragsvermittlung und Kundenbetreuung. <b>Beschäftigungsgrad</b> = Leistungsfähigkeit/Kapazität eines Unternehmens oder einer Maschine. Fixkosten je Stück sinken bei steigender Menge.</div>
+
+  <h3 class="sub">Krause: Einzel- und Gemeinkosten</h3>
+  <div class="task"><div class="q">Provision 95.130 · Personal 63.450 · Verwaltung 55.150 · Steuern 9.810 · Werbung 19.350 · Kfz 7.350 · Schulung 4.850 · Energie 9.210 · Miete 14.500 · Gesamt 278.800. Von der Werbung betreffen 10.000 eine Werbeaktion zur privaten Haftpflichtversicherung, von der Schulung 2.000 eine Fortbildung zur betrieblichen Altersversorgung.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Einzelkosten: 95.130 (Provision) + 10.000 (Werbeaktion für eine Sparte) + 2.000 (Fortbildung für eine Sparte) = 107.130
+Gemeinkosten: Personal 63.450 + Verwaltung 55.150 + Steuern 9.810 + Werbung 9.350 + Kfz 7.350 + Schulung 2.850 + Energie 9.210 + Miete 14.500 = 171.670
+Probe: 107.130 + 171.670 = 278.800 ✓
+Regel: Wirkt Werbung/Schulung nur für bestimmte Sparten → Einzelkosten. „Ganz allgemein“ → Gemeinkosten. Personal ist nur Einzelkosten, wenn Mitarbeiter ausschließlich für eine Sparte arbeiten.</div></details></div>
+
+  <h3 class="sub">Nagel-Meyer: fix, variabel, neutral</h3>
+  <div class="task"><div class="q">Werbe-/Reise 500 · Betriebsinhaltsversicherung 280 · Provisionen an Untervertreter 1.600 · Hypothekenzinsen Geschäftsgebäude 350 · Strom 70 (Grundgebühr 10) · Geschäftsraummiete 1.350 · Nachzahlung Energie vom letzten Geschäftsjahr 300 · Verlust aus Abgang eines Anlagegegenstandes 310 · Gehälter 14.000. Was ist fix, variabel, weder noch?</div>
+    <details><summary>Lösung</summary><div class="ans mono">Fix: 280 + 10 (Grundgebühr) + 1.350 + 14.000 = 15.640
+Variabel: 500 + 1.600 + 60 (Strom ohne Grundgebühr) = 2.160
+Weder noch (neutral): 350 (Hypothek, HuGA) + 300 (periodenfremd) + 310 (betriebsgelegentlich) = 960
+Probe: 15.640 + 2.160 + 960 = 18.760 = Summe aller Posten ✓</div></details></div>
+  <div class="task"><div class="q">Laserdrucker 17 Seiten pro Minute, 8 Stunden am Tag. a) tägliche maximale Kapazität? b) täglicher Beschäftigungsgrad, wenn er im Wochendurchschnitt nur 25 Stunden läuft?</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) 17 × 60 × 8 = 8.160 Seiten pro Tag
+b) 25 Stunden : 5 Tage = 5 Stunden pro Tag → 17 × 60 × 5 = 5.100 Seiten
+   5.100 : 8.160 = 0,625 = 62,5 %</div></details></div>
+  <div class="task"><div class="q">Juni: 40 vermittelte Verträge, Fixkosten 210, variable Kosten 400, Provisionen an Untervertreter 680. a) variable Kosten je Vertrag, b) Gesamtkosten je Vertrag. Juli: 20 Verträge, Fixkosten gleich, variable Kosten und Provisionen im gleichen Verhältnis gesunken. c) Gesamtkosten je Vertrag im Juli.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Die 680 sind Provisionen an Untervertreter, also variable Kosten (der Text nennt sie „Provisionsertrag“).
+a) (400 + 680) : 40 = 27 € je Vertrag
+b) Fixkosten je Vertrag 210 : 40 = 5,25 → Gesamtkosten 27 + 5,25 = 32,25 €
+c) Juli: variable Kosten 1.080 × 20/40 = 540
+   (210 + 540) : 20 = 37,50 €
+Lehre: Weniger Verträge → Fixkosten je Vertrag steigen (10,50 statt 5,25).</div></details></div>
+</section>
+
+<!-- KAPITEL 5 -->
+<section class="chapter">
+  <h2>5 · Ergebnisbogen (Betriebsergebnis)</h2>
+  <div class="def"><b>Vorgehen</b><br>1. Aus der GuV: neutrale Posten abziehen (KEB: Aufwand − neutraler Aufwand = betrieblicher Aufwand)<br>2. Grundkosten = betrieblicher Aufwand ohne Posten, die durch kalk. Werte ersetzt werden<br>3. + Anderskosten (kalk. Abschreibung, kalk. Zinsen)<br>4. + Zusatzkosten (Unternehmerlohn, kalk. Miete)<br>5. = Kosten. Leistungen (Provisionserträge) − Kosten = <b>Betriebsergebnis</b><br>6. Probe: UE = BE + NE + (Kosten − betriebliche Aufwendungen)</div>
+
+  <h3 class="sub">Krause: Kosten und Betriebsergebnis</h3>
+  <div class="task"><div class="q">Gegeben: Abgrenzung aus Kap. 2. Das Kfz (AK 12.000, bilanziell 2.000 pro Jahr) wird mit einem um 10 % höheren Wiederbeschaffungspreis berücksichtigt. Unternehmerlohn 4.000 monatlich. Betriebsnotwendiges Kapital 130.000, Zinssatz 6 %. Stelle Grund-, Anders-, Zusatzkosten und das Betriebsergebnis auf.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Grundkosten: 101.700 − 2.000 (AbKfz) − 1.600 (Zinsaufwand) = 98.100
+  (Provision 53.578 + Miete 21.000 + Werbe 5.400 + Verwaltung 9.400 + Kfz 1.900 + Steuern 6.822)
+Anderskosten:
+  Kfz: 12.000 × 1,10 : 6 = 2.200
+  Zinsen: 130.000 × 6 % = 7.800
+  Summe 10.000
+Zusatzkosten: 4.000 × 12 = 48.000
+Kosten: 98.100 + 10.000 + 48.000 = 156.100
+Betriebsergebnis: 180.000 − 156.100 = 23.900
+Probe: 23.900 + 13.200 + (156.100 − 101.700) = 91.500 ✓</div></details></div>
+  <div class="note"><b>Zinsen:</b> Weil Krause Zinsaufwand 1.600 gebucht hat, sind die 7.800 <b>Anderskosten</b> (der Aufwand wird ersetzt). Bei dir stand 7.800 bei den Zusatzkosten (55.800). Die Summe ist gleich, aber Zeilen bewertet man einzeln.</div>
+
+  <h3 class="sub">A6.4: GuV 31.12.20XX</h3>
+  <div class="task"><div class="q">Aufwand: Provision 74.000, Werbe-/Reise 4.200, Verwaltung 2.680, Miete 12.000, Abschreibung auf Anlagen 2.000, außerordentlicher Aufwand 4.300, Haus-/Grundstücksaufwand 27.600. Erträge: Provision 165.000, Zinsertrag 1.900, außerordentlicher Ertrag 2.500, Haus-/Grundstücksertrag 68.000. Abschreibung: linear, 20 % (= 2.000) bei 5 Jahren, Wiederbeschaffungswert 800 über dem Anschaffungspreis. Zinsen: 6,5 % vom betriebsnotwendigen Kapital 50.000. Unternehmerlohn 4.700 mtl. Gesucht: Gewinn, Kosten und Leistungen, Betriebsergebnis, neutrales Ergebnis.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Gewinn (Unternehmensergebnis): 237.400 − 126.780 = 110.620
+Neutraler Aufwand: 4.300 + 27.600 = 31.900 · Neutraler Ertrag: 1.900 + 2.500 + 68.000 = 72.400
+Neutrales Ergebnis: 72.400 − 31.900 = 40.500
+Grundkosten: 74.000 + 4.200 + 2.680 + 12.000 = 92.880
+Anderskosten: Abschreibung: Anschaffung 2.000 : 20 % = 10.000, Wiederbeschaffung 10.800 : 5 = 2.160
+              Zinsen: 50.000 × 6,5 % = 3.250 → zusammen 5.410
+Zusatzkosten: 4.700 × 12 = 56.400
+Kosten: 92.880 + 5.410 + 56.400 = 154.690
+Leistung: 165.000
+Betriebsergebnis: 165.000 − 154.690 = 10.310
+Probe: 10.310 + 40.500 + (154.690 − 94.880) = 110.620 ✓</div></details></div>
+  <div class="note"><b>Zuordnung der Zinsen:</b> Hier ist kein Zinsaufwand gebucht. Nach der Übersicht wären die 3.250 dann Zusatzkosten, im Skript und in der Lehrer-Lösung stehen kalk. Zinsen als Anderskosten. Die Gesamtkosten (154.690) sind gleich. Schreibe in der Klausur den Hinweis dazu.</div>
+
+  <h3 class="sub">S19: Agentur Vorsorge (negatives Betriebsergebnis)</h3>
+  <div class="task"><div class="q">Posten: Provisionsaufwand 60.000 · Provisionserträge 172.000 · Haus-/Grundstücksaufwand 6.500 · Zinserträge 6.000 · Abschreibungen auf BGA 1.200 · Kfz-Aufwand 6.300 · Regulierungsaufwand 900 · außerordentlicher Aufwand 1.880 · außerordentlicher Ertrag 300 · Energie 2.600 · Entschädigungen 7.500 · Privatentnahmen 46.000 · Abschreibungen auf Kfz 3.200 · Werbe-/Reise 4.000 · Haus-/Grundstücksertrag 14.400 · Abschreibungen auf GWG 900 · Gehälter 24.200 · sozialer Aufwand 6.000 · Verwaltung 17.930.<br>Infos: Ladenlokal im privaten Wohn- und Geschäftshaus, ein gleich großes Lokal wird für 1.200 €/Monat vermietet. Privatentnahmen = Unternehmerlohn. Verzinsung des investierten Eigenkapitals 60.000 mit 4 %. Bilanzielle Abschreibungen sind 10 % niedriger als die kalkulatorischen. a) Unternehmensergebnis, b) Betriebsergebnis, c) neutrales Ergebnis.</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) Erträge: 172.000 + 6.000 + 300 + 14.400 = 192.700
+   Aufwendungen (ohne Regulierungsaufwand, Entschädigungen, Privatentnahmen): 134.710
+   Unternehmensergebnis: 192.700 − 134.710 = 57.990
+b) Grundkosten: Provision 60.000 + Kfz 6.300 + Energie 2.600 + Werbe 4.000 + Gehälter 24.200 + sozial 6.000 + Verwaltung 17.930 = 121.030
+   Anderskosten: kalk. Abschreibung (1.200 + 3.200 + 900) × 1,10 = 5.830
+                 kalk. Zinsen 60.000 × 4 % = 2.400 → zusammen 8.230
+   Zusatzkosten: Unternehmerlohn 46.000 + kalk. Miete 12 × 1.200 = 14.400 → 60.400
+   Kosten: 121.030 + 8.230 + 60.400 = 189.660
+   Betriebsergebnis: 172.000 − 189.660 = −17.660
+c) Neutrale Aufwendungen: 6.500 (HuGA) + 1.880 = 8.380
+   Neutrale Erträge: 6.000 + 300 + 14.400 (HuGE) = 20.700
+   Neutrales Ergebnis: 20.700 − 8.380 = 12.320
+Probe: −17.660 + 12.320 + (189.660 − 126.330) = 57.990 ✓</div></details></div>
+  <div class="note"><b>Zu beachten:</b> Privatentnahmen sind kein Aufwand, sondern ersetzen den Unternehmerlohn (Zusatzkosten). Die kalk. Miete 14.400 entspricht der Miete des gleich großen Nachbarlokals. Regulierungsaufwand 900 und Entschädigungen 7.500 gehen in der Lehrer-Rechnung nicht in das Ergebnis ein (Schadenregulierung für die Direktion, wie S16 Nr. 6). Das ist die wahrscheinlichste Lesart, aber nicht sicher.</div>
+</section>
+
+<!-- KAPITEL 6 -->
+<section class="chapter">
+  <h2>6 · Deckungsbeitragsrechnung (Teilkostenrechnung)</h2>
+  <div class="def"><b>Vollkostenrechnung:</b> Alle Kostenarten werden über die Kostenstellen auf die Kostenträger verrechnet. Wichtig für die Analyse der Kostenstruktur und Wirtschaftlichkeit. <b>Teilkostenrechnung:</b> Fokus auf der Trennung in fixe und variable Kosten. Der <b>Deckungsbeitrag</b> zeigt, wie viel des Erlöses zur Deckung der noch nicht verrechneten Fixkosten zur Verfügung steht.</div>
+  <div class="formulas">
+    <div class="fbox"><h3>Formeln</h3><code>DB = Erlös der Bezugsgruppe − var. Kosten
+Betriebsergebnis = Σ DB − Fixkosten
+DB-Quote = DB : Erlös
+Break-even = Fixkosten : DB-Quote</code></div>
+    <div class="fbox"><h3>Drei Ergebnisse</h3><code>DB &lt; Fixkosten → Verlust
+DB = Fixkosten → weder Gewinn noch Verlust
+DB &gt; Fixkosten → Gewinn</code></div>
+  </div>
+
+  <h3 class="sub">DB Aufgabe 1: Vermittlung und Kundenbetreuung</h3>
+  <div class="task"><div class="q">Erlöse: Abschlussprovision 90.000, Bonifikation 20.000, Folgeprovision 120.000. Kostenträger Vermittlung: 100 % Abschlussprovision und Bonifikation, 15 % der Folgeprovision. Kostenträger Kundenbetreuung: 85 % der Folgeprovision. Variable Kosten 171.000 im Verhältnis 5 : 4. a) Mit welchem DB tragen die Kostenträger zur Deckung der noch nicht verteilten Fixkosten von 50.000 bei? b) Fixkosten nur zu 40 % Vermittlung, zu 60 % Kundenbetreuung: Beurteile die Ergebnisse.</div>
+    <details><summary>Lösung</summary><div class="ans mono">Erlöse
+Vermittlung: 90.000 + 20.000 + 0,15 × 120.000 = 128.000
+Kundenbetreuung: 0,85 × 120.000 = 102.000
+Variable Kosten (9 Teile): Vermittlung 171.000 : 9 × 5 = 95.000 · Kundenbetreuung × 4 = 76.000
+a) DB Vermittlung: 128.000 − 95.000 = 33.000
+   DB Kundenbetreuung: 102.000 − 76.000 = 26.000
+   Summe 59.000 − Fixkosten 50.000 = +9.000 (Betriebsergebnis)
+b) Fixkosten Vermittlung: 0,4 × 50.000 = 20.000 → 33.000 − 20.000 = +13.000
+   Fixkosten Kundenbetreuung: 0,6 × 50.000 = 30.000 → 26.000 − 30.000 = −4.000
+Beurteilung: Vermittlung deckt ihre Fixkosten und bringt Gewinn. Kundenbetreuung deckt ihre Fixkosten nicht, sie trägt aber mit 26.000 positiv zur Deckung bei. Insgesamt bleibt ein Gewinn von 9.000.</div></details></div>
+
+  <h3 class="sub">DB Aufgabe 2: Kostenstellen Müller, Meier, Schmitz</h3>
+  <div class="task"><div class="q">Stelleneinzelkosten (Innendienst): Kostenstelle Müller (Sachbearbeiter Antrag) 40.000, Meier (Kundenbetreuung) 46.000, Schmitz (Schadenregulierung) 50.000. Stellengemeinkosten: Provisionsaufwand 76.000 (voll bei Müller), Mietaufwand 24.000 nach qm (Müller 15, Meier 25, Schmitz 20), Verwaltungsaufwand 9.000 und Energieaufwand 3.000 jeweils 3 : 5 : 4, kalk. Unternehmerlohn 70.000 (Müller 60 %, Meier 30 %, Schmitz 10 %).<br>a) Kosten je Kostenstelle. b) Kostenträger sind Abschlussprovisionen 150.000 (Vermittlung) und Bestandsprovisionen 170.000 (Betreuung). Müllers Kosten werden durch die Abschlussprovisionen gedeckt, Meier aus 60 % und Schmitz aus 40 % der Bestandsprovision: Vollkostenrechnung. c) Teilkostenrechnung: Einzelkosten, Mietanteil und Unternehmerlohn 100 % fix, Provisions-, Verwaltungs- und Energieaufwand variabel. d) Aussagekraft?</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) Miete (60 qm): Müller 15/60 × 24.000 = 6.000 · Meier 10.000 · Schmitz 8.000
+   Verwaltung (12 Teile): Müller 2.250 · Meier 3.750 · Schmitz 3.000
+   Energie: Müller 750 · Meier 1.250 · Schmitz 1.000
+   Unternehmerlohn: 42.000 · 21.000 · 7.000
+   Kosten: Müller 40.000 + 76.000 + 6.000 + 2.250 + 750 + 42.000 = 167.000
+           Meier 46.000 + 10.000 + 3.750 + 1.250 + 21.000 = 82.000
+           Schmitz 50.000 + 8.000 + 3.000 + 1.000 + 7.000 = 69.000
+b) Müller: 150.000 − 167.000 = −17.000 (Unterdeckung)
+   Erlöse Meier 0,6 × 170.000 = 102.000 → 102.000 − 82.000 = +20.000
+   Erlöse Schmitz 0,4 × 170.000 = 68.000 → 68.000 − 69.000 = −1.000
+   Gesamt: 320.000 − 318.000 = +2.000
+c) Variable Kosten: Müller 2.250 + 750 + 76.000 = 79.000 · Meier 3.750 + 1.250 = 5.000 · Schmitz 3.000 + 1.000 = 4.000
+   DB: Müller 150.000 − 79.000 = 71.000 · Meier 102.000 − 5.000 = 97.000 · Schmitz 68.000 − 4.000 = 64.000 (Summe 232.000)
+   Fixkosten: Müller 40.000 + 6.000 + 42.000 = 88.000 · Meier 46.000 + 10.000 + 21.000 = 77.000 · Schmitz 50.000 + 8.000 + 7.000 = 65.000 (Summe 230.000)
+   Betriebsergebnis: 232.000 − 230.000 = 2.000 ✓ (gleich wie in b)
+d) Vollkosten: Müller −17.000 (Verlust, mögliche Steuerung/Einstellung des Bereichs), Schmitz −1.000.
+   Teilkosten: Müller zeigt +71.000 DB, deckt seine variablen Kosten und trägt stark zur Fixkostendeckung bei. Auch Schmitz (+64.000) ist positiv. Beide sind relevant und gewinnbringend, ihre Fixkosten fallen auch bei Aufgabe weiter an.</div></details></div>
+
+  <h3 class="sub">S20 · Versicherungsvertreter Amelung</h3>
+  <div class="task"><div class="q">Amelung erhält monatlich 1.500 Festgehalt und 120 Fahrtkostenzuschuss sowie 60 % Provision vom vermittelten Beitragsneuzugang. Die Direktion zahlt der Agentur 80 % Provision vom Beitragsneuzugang. Oktober: Beitragsneuzugang 7.600. a) Fixkosten, b) variable Kosten Oktober, c) Fixkosten ins Verdienen gebracht? d) Welcher Beitragsneuzugang mindestens, damit seine Fixkosten durch den der Agentur zustehenden Provisionsanteil gedeckt sind?</div>
+    <details><summary>Lösung</summary><div class="ans mono">a) Fixkosten: 1.500 + 120 = 1.620
+b) Variable Kosten: 0,6 × 7.600 = 4.560
+c) Erlös der Agentur: 0,8 × 7.600 = 6.080
+   Deckungsbeitrag: 6.080 − 4.560 = 1.520
+   1.520 − 1.620 = −100 → Nein, die Fixkosten sind nicht verdient (100 fehlen)
+d) Pro 1 € Neuzugang bleiben 0,80 − 0,60 = 0,20 € DB (DB-Quote 20 %)
+   Break-even: 1.620 : 0,20 = 8.100 Beitragsneuzugang
+   Probe: 0,2 × 8.100 = 1.620 ✓</div></details></div>
+</section>
+
+<!-- KAPITEL 7 -->
+<section class="chapter">
+  <h2>7 · Wissensfragen (Karteikarten)</h2>
+  <p class="lead">Erst laut antworten, dann aufdecken.</p>
+  <details><summary>Wozu dient die KLR?</summary><div class="ans">Sie zeigt, welche Kosten entstanden sind und wo (Kostenarten, Kostenstellen), und ob die eigentliche Vermittlungs- und Betreuungstätigkeit Gewinn bringt. Sie ist internes Rechnungswesen, freiwillig.</div></details>
+  <details><summary>Nenne die drei Schritte der Kostenartenrechnung.</summary><div class="ans">1. Sachliche Abgrenzung, 2. Ermittlung der Kosten und Leistungen, 3. Betriebsergebnis.</div></details>
+  <details><summary>Nenne die drei Merkmale von Kosten.</summary><div class="ans">Betriebsbedingt, ordentlich (normal), periodenbezogen. Fehlt eines, ist es neutraler Aufwand.</div></details>
+  <details><summary>Vier Arten neutraler Aufwendungen?</summary><div class="ans">Betriebsfremd, periodenfremd, betriebsgelegentlich, außerordentlich.</div></details>
+  <details><summary>Warum ist das Betriebsergebnis wichtiger als das Unternehmensergebnis?</summary><div class="ans">Es zeigt den Erfolg der eigentlichen Tätigkeit (Vermittlung/Betreuung). Das Unternehmensergebnis enthält neutrale Posten wie Zinserträge oder Mieterträge, die nichts mit dem Betriebszweck zu tun haben.</div></details>
+  <details><summary>Nicht jede Ausgabe ist Aufwand, nicht jeder Aufwand ist Kosten. Erkläre.</summary><div class="ans">Ausgabe ohne Aufwand: Computerkauf per Überweisung (Aktivtausch) → zeitliche Abgrenzung nötig. Aufwand ohne Kosten: Hypothekenzinsen, Kassenmanko → sachliche Abgrenzung nötig.</div></details>
+  <details><summary>Grund-, Anders-, Zusatzkosten?</summary><div class="ans">Grund: Kosten = Aufwand (Zweckaufwand). Anders: aufwandsungleich, z. B. kalk. Abschreibung. Zusatz: aufwandslos, z. B. Unternehmerlohn.</div></details>
+  <details><summary>Warum kalkulatorische Abschreibung?</summary><div class="ans">Sie erfasst den tatsächlichen Wertverlust, den die rechtlichen Abschreibungen oft verfälschen, und das Mehr an Wiederbeschaffungskosten bei der späteren Ersatzinvestition.</div></details>
+  <details><summary>Warum kalkulatorische Zinsen?</summary><div class="ans">Das eingesetzte Kapital hätte am Markt Zinsen gebracht. Verzinst wird das betriebsnotwendige Kapital, unabhängig davon, ob es Eigen- oder Fremdkapital ist. Zinsloses Fremdkapital (Abzugskapital) wird herausgerechnet.</div></details>
+  <details><summary>Warum kalkulatorischer Unternehmerlohn und kalkulatorische Miete?</summary><div class="ans">Der Inhaber arbeitet mit, aber seine Tätigkeit wird nicht als Aufwand gebucht. Bei eigenem Gebäude entsteht weder Mietaufwand noch Mieteinnahme, die Büroräume haben aber einen Wert. Beides sind Zusatzkosten.</div></details>
+  <details><summary>Warum ist Haus- und Grundstücksaufwand neutral, auch bei eigenem Geschäftsgebäude?</summary><div class="ans">Es zählt nicht zur eigentlichen Vermittlungstätigkeit. Die Nutzung der eigenen Räume wird stattdessen über die kalkulatorische Miete berücksichtigt.</div></details>
+  <details><summary>Einzel- und Gemeinkosten?</summary><div class="ans">Einzelkosten sind dem Kostenträger direkt zurechenbar (Vermittlungsprovision), Gemeinkosten nicht (Energie, Miete). Sie werden über Schlüssel verteilt.</div></details>
+  <details><summary>Fixe, variable, Mischkosten?</summary><div class="ans">Fix ändern sich nicht mit dem Beschäftigungsgrad (Gehälter, Miete), variabel ändern sich mit (Provisionsaufwand). Misch: beides (Telefon aus Grundgebühr und Gesprächen).</div></details>
+  <details><summary>Was passiert mit den Stückkosten bei sinkender Menge?</summary><div class="ans">Fixkosten je Stück steigen (Juni 5,25 €, Juli 10,50 €), variable Kosten je Stück bleiben gleich. Gesamtkosten je Stück steigen.</div></details>
+  <details><summary>Was ist der Deckungsbeitrag?</summary><div class="ans">Erlös der Bezugsgruppe minus variable Kosten. Er zeigt, wie viel zur Deckung der noch nicht verrechneten Fixkosten übrig bleibt.</div></details>
+  <details><summary>Wann ist ein Bereich bei negativem Vollkostenergebnis trotzdem sinnvoll?</summary><div class="ans">Wenn sein Deckungsbeitrag positiv ist. Dann trägt er zur Fixkostendeckung bei, und die Fixkosten fallen auch nach Aufgabe an (Beispiel Müller: −17.000 Vollkosten, aber +71.000 DB).</div></details>
+  <details><summary>Wie berechnet man den Break-even?</summary><div class="ans">Fixkosten : DB-Quote (bezogen auf Erlös oder Beitragsneuzugang). Beispiel S20: 1.620 : 0,20 = 8.100.</div></details>
+</section>
+
+<section>
+  <h2>Formelsammlung</h2>
+  <div class="formulas">
+    <div class="fbox"><h3>Ergebnisse</h3><code>UE = Erträge − Aufwendungen
+BE = Leistungen − Kosten
+NE = neutr. Erträge − neutr. Aufw.
+UE = BE + NE + (Kosten − betr. Aufw.)</code></div>
+    <div class="fbox"><h3>Kosten</h3><code>Kosten = Grund + Ander + Zusatz
+Grund = betr. Aufw. − ersetzte Aufw.
+kalk. AfA = WBW : ND (× Monate : 12)
+kalk. Zins = Kapital × Satz
+Kapital = betriebsnotw. Vermögen
+         − Abzugskapital</code></div>
+    <div class="fbox"><h3>DB</h3><code>DB = Erlös − var. Kosten
+BE = Σ DB − Fixkosten
+BEP = Fix : DB-Quote
+Beschäftigung = Ist : Kapazität
+Stückkosten = var. je Stück + Fix : Menge</code></div>
+  </div>
+</section>
+
+<section>
+  <h2>Typische Fehler</h2>
+  <ul class="plain">
+    <li>Hypothekenzinsen, Abschreibung auf das Geschäftsgebäude oder Renovierung als <b>Kosten</b> ansetzen (richtig: neutral, HuGA).</li>
+    <li>Bei Anderskosten den gebuchten Aufwand nicht aus den Grundkosten nehmen (doppelt).</li>
+    <li>S15: Abschreibung im Anschaffungsjahr voll statt 6/12 ansetzen. S18: Anschaffungskosten statt kalk. Restwert für das Anlagevermögen nehmen (richtig: 26.000 − 13.000 + 5.000 = 18.000).</li>
+    <li>Provisionsrückbelastung als Kosten buchen (richtig: sie kürzt die Leistung).</li>
+    <li>Einkommensteuer, Privatentnahmen, Kfz-Steuer Privatwagen als Kosten behandeln (neutral bzw. weder noch).</li>
+    <li>Unternehmerlohn nur einen Monat statt 12 Monate rechnen.</li>
+    <li>Bestände bei Zinsen nicht als Durchschnitt rechnen.</li>
+    <li>Bei Einzel-/Gemeinkosten Werbung für eine bestimmte Sparte als Gemeinkosten buchen.</li>
+    <li>Negatives Vollkostenergebnis sofort mit „aufgeben“ gleichsetzen, ohne DB zu prüfen.</li>
+    <li>Probe weglassen.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Analyse und Plausibilitätscheck</h2>
+  <h3 class="sub">A) Was in dieser Version korrigiert wurde</h3>
+  <ul class="plain">
+    <li><b>Haus- und Grundstücksaufwand</b> ist neutral. Hypothekenzinsen, Gebäude-Abschreibung, Renovierung Privatwohnung sind jetzt entsprechend gerechnet.</li>
+    <li><b>S15:</b> Aufgabentext war falsch beschrieben. Jetzt: 18.000 €, 6 Monate, Ergebnis 1.500 und 1.650.</li>
+    <li><b>S16:</b> Aufgabentext ergänzt. Neutraler Erfolg ist −2.521, nicht nur 79.</li>
+    <li><b>S18, A6.4, S19, Nagel-Meyer, Krause, Marks, DB 2:</b> echte Posten und Bezeichnungen aus den Scans eingesetzt (z. B. A6.4: Miete 12.000, nicht „Sonstiges“).</li>
+    <li><b>Dezember-Aufgabe:</b> alle Posten ergänzt (neutral 3.140, nicht 1.460).</li>
+    <li><b>Neu aufgenommen:</b> Glossar, Zuordnungsübersicht mit Kürzeln, Zuordnungsaufgaben, b/o/p-Tabelle, Aufgaben Schritt 1 und 2, Mischkosten, Beschäftigungsgrad Laserdrucker.</li>
+  </ul>
+
+  <h3 class="sub">B) Zahlenprüfung</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Aufgabe</th><th>Ergebnis der Prüfung</th></tr></thead>
+    <tbody>
+      <tr><td>Marks, Krause, A6.4, Kfz, Glossar</td><td>Alle Summen und Proben stimmen</td></tr>
+      <tr><td>S15, S16, S18, S20</td><td>Stimmen mit den Aufgabentexten (S18: zwei Varianten, siehe unten)</td></tr>
+      <tr><td>S19</td><td>Stimmt: UE 57.990, BE −17.660, NE 12.320, Probe geht auf</td></tr>
+      <tr><td>Einzel/Gemein, Nagel-Meyer, Laserdrucker</td><td>Stimmen</td></tr>
+      <tr><td>DB 1, DB 2</td><td>Stimmen. DB 2: Vollkosten- und Teilkostenrechnung ergeben beide +2.000</td></tr>
+    </tbody>
+  </table></div>
+  <p class="lead">Insgesamt 126 Werte unabhängig per Skript neu berechnet, alle stimmen. Die Probe UE = BE + NE + (Kosten − betr. Aufwand) geht bei Marks, Krause, A6.4 und S19 auf.</p>
+
+  <h3 class="sub">C) Offene Punkte</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Punkt</th><th>Annahme</th></tr></thead>
+    <tbody>
+      <tr><td>S18: Abzugskapital 2.200 abziehen?</td><td>Lehrer-Foto: 1.638 (ohne Abzug). Mitschrift: Abzugskapital wird herausgerechnet → 1.506. Beide Zwischenstände aufschreiben.</td></tr>
+      <tr><td>Kalk. Zinsen: Anderskosten oder Zusatzkosten?</td><td>Skript und Lehrer-Lösung: Anderskosten. Übersicht: Zusatzkosten, wenn kein Zinsaufwand gebucht. Gesamtkosten gleich.</td></tr>
+      <tr><td>Renovierung Privatwohnung 1.680</td><td>Neutral (HuGA). Deine Handnotiz „Kosten“ vermutlich falsch.</td></tr>
+      <tr><td>S19: Regulierungsaufwand 900 und Entschädigungen 7.500</td><td>Nicht im Ergebnis, passt zu den Lehrer-Werten (134.710).</td></tr>
+      <tr><td>S19: „Abschreibungen 10 % niedriger als kalkulatorisch“</td><td>Lehrer-Lösung rechnet × 1,10. Streng gelesen wäre kalk. = bilanziell : 0,9. Folge der Lehrer-Lösung.</td></tr>
+      <tr><td>Marks Zinsaufwand 2.000 und Krause Zinsaufwand 1.600</td><td>Marks: Kredit für vermietete Wohnung → neutral. Krause: betrieblich.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><b>Deine alten handschriftlichen Lösungen</b> enthielten laut deiner Notiz „einige Falschsachen“. Gefunden: Hypothek/Gebäude-Abschreibung als Kosten, S18 mit 31.000 Anlagevermögen, Krause-Zinsen als Zusatzkosten, S19 ohne Zuordnungen. Lerne nur von dieser Seite.</div>
+
+  <h3 class="sub">D) Sicher und unsicher</h3>
+  <p><b>Sicher:</b> Abgrenzung, Marks, Krause, A6.4, S15, S16, S19 (Ergebnisse), S20, Einzel/Gemein, Nagel-Meyer, DB 1, DB 2, alle Formeln. <b>Weniger sicher:</b> S18 (Abzugskapital), Renovierung 1.680, Zuordnung der kalk. Zinsen bei A6.4, die Auslassung von 900/7.500 bei S19. Die Lehrer-Fotos konnte ich nur in meiner früheren Auswertung nutzen. Prüfe die Punkte in Abschnitt C, wenn die Klausur sie fragt.</p>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll('.unit input'));
+  var key='lf12-lernplan-klr-v6', state={};
+  try{state=JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){state={}}
+  function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}}
+  function render(){
+    var n=0;
+    boxes.forEach(function(b){
+      var on=!!state[b.dataset.k]; b.checked=on; if(on)n++;
+      b.closest('.unit').classList.toggle('done',on);
+    });
+    document.getElementById('ptext').textContent=n+' von '+boxes.length+' erledigt';
+    document.getElementById('pbar').style.width=(n/boxes.length*100)+'%';
+  }
+  boxes.forEach(function(b){b.addEventListener('change',function(){state[b.dataset.k]=b.checked;save();render()})});
+  document.getElementById('reset').addEventListener('click',function(){state={};save();render()});
+  render();
+})();
+</script>
+
+</body>
+</html>
